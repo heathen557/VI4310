@@ -153,8 +153,15 @@
     </property>
     <addaction name="statistic_action"/>
    </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>设置</string>
+    </property>
+    <addaction name="pileUp_action"/>
+   </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -166,6 +173,7 @@
    <addaction name="openFile_action"/>
    <addaction name="saveFile_action"/>
    <addaction name="statistic_action"/>
+   <addaction name="pileUp_action"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="left_dockWidget">
@@ -327,7 +335,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="page">
         <property name="geometry">
@@ -335,11 +343,11 @@
           <x>0</x>
           <y>0</y>
           <width>300</width>
-          <height>392</height>
+          <height>433</height>
          </rect>
         </property>
         <attribute name="label">
-         <string>Page 1</string>
+         <string>基本设置</string>
         </attribute>
         <widget class="QPushButton" name="play_pushButton">
          <property name="geometry">
@@ -361,12 +369,172 @@
           <x>0</x>
           <y>0</y>
           <width>300</width>
-          <height>392</height>
+          <height>433</height>
          </rect>
         </property>
         <attribute name="label">
-         <string>Page 2</string>
+         <string>显示设置</string>
         </attribute>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>20</y>
+           <width>220</width>
+           <height>141</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>3D鼠标设置：</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_22">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>旋转角度：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="rotate_horizontalSlider">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>50</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>缩放比例：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="scale_horizontalSlider">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>50</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_13">
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>拖动比例：</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="translate_horizontalSlider">
+              <property name="minimum">
+               <number>10</number>
+              </property>
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="geometry">
+          <rect>
+           <x>40</x>
+           <y>190</y>
+           <width>220</width>
+           <height>115</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>显示设置：</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_23">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>  peak显示阈值：</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLineEdit" name="peakOffset_lineEdit">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>      平均帧数：</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QLineEdit" name="averageNum_lineEdit">
+            <property name="text">
+             <string>1</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>只显示中心区域：</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QRadioButton" name="centerShowYes_radioButton">
+            <property name="text">
+             <string>是</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QRadioButton" name="centerShowNo_radioButton">
+            <property name="text">
+             <string>否</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </widget>
      </item>
@@ -420,6 +588,15 @@
    </property>
    <property name="text">
     <string>统计信息</string>
+   </property>
+  </action>
+  <action name="pileUp_action">
+   <property name="icon">
+    <iconset resource="imgsource.qrc">
+     <normaloff>:/new/prefix1/images/ccPivotAuto.png</normaloff>:/new/prefix1/images/ccPivotAuto.png</iconset>
+   </property>
+   <property name="text">
+    <string>相机校正</string>
    </property>
   </action>
  </widget>

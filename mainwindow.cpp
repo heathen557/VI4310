@@ -105,6 +105,11 @@ void MainWindow::load_ini_file()
     ui->widget->rotateRate = Rotate_rate;
     ui->widget->scaleRate = Scale_rate;
     ui->widget->translateRate = transtate_rate;
+
+
+    ui->rotate_horizontalSlider->setValue(Rotate_rate);
+    ui->scale_horizontalSlider->setValue(Scale_rate);
+    ui->translate_horizontalSlider->setValue(transtate_rate);
     QString log_str = "[load conf file success]:setting.ini";
     Display_log_slot(log_str);
 
@@ -218,12 +223,46 @@ void MainWindow::isSaveFlagSlot(bool flag,QString filePath,int fileFormat)
 }
 
 
+//旋转角度设置的槽函数
+void MainWindow::on_rotate_horizontalSlider_sliderMoved(int position)
+{
+    ui->widget->rotateRate = position;
+    save3DSettingFile();
+}
+
+//缩放比例设置的槽函数
+void MainWindow::on_scale_horizontalSlider_sliderMoved(int position)
+{
+    ui->widget->scaleRate = position;
+    save3DSettingFile();
+}
+
+//拖放比例的槽函数
+void MainWindow::on_translate_horizontalSlider_sliderMoved(int position)
+{
+    ui->widget->translateRate = 110 - position;
+    save3DSettingFile();
+}
+
+//鼠标控制相关的配置 会保存到配置文件当中
+void MainWindow::save3DSettingFile()
+{
+    QSettings configSetting("setting.ini", QSettings::IniFormat);
+
+    int rotateRate = ui->widget->rotateRate;
+    int scaleRate = ui->widget->scaleRate;
+    int translateRate = 110-ui->widget->translateRate;
+
+    configSetting.setValue("operation/Rotate_rate",rotateRate);
+    configSetting.setValue("operation/Scale_rate",scaleRate);
+    configSetting.setValue("operation/transtate_rate",translateRate);
+
+}
+
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-
 
 

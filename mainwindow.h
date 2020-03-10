@@ -49,6 +49,14 @@ private slots:
 
     void isSaveFlagSlot(bool,QString,int);       //是否保存标识；存储路径；文件类型（预留）
 
+    void on_rotate_horizontalSlider_sliderMoved(int position);    //旋转
+
+    void on_scale_horizontalSlider_sliderMoved(int position);     //缩放
+
+    void on_translate_horizontalSlider_sliderMoved(int position); //平移
+
+    void save3DSettingFile();
+
 signals:
     void change_gain_signal(float);
     void change_tof_peak_signal();
