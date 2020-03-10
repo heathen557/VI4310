@@ -2,12 +2,15 @@
 #include "ui_mainwindow.h"
 
 //是否显示 直方图统计功能,切换tof/peak的按钮
-#define SHOW_HISTORGRAM_BUTTON
+//#define SHOW_HISTORGRAM_BUTTON
 //#define SHOW_TOF_PEAK_BUTTON
 
 using namespace std;
-extern QMutex mutex;
 
+/*保存用到的标识*/
+extern bool isSaveFlag;        //是否进行存储
+extern QString saveFilePath;   //保存的路径  E:/..../.../的形式
+extern int saveFileIndex;      //文件标号；1作为开始
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -41,6 +44,18 @@ void MainWindow::init_thread()
     dealMsg_obj->moveToThread(dealMsg_thread);
     dealMsg_thread->start();
 
+    //文件保存线程
+    savePcd_thread = new QThread();      //文件保存线程
+    savePcd_obj = new savePCDThread;
+    savePcd_obj->moveToThread(savePcd_thread);
+    savePcd_thread->start();
+
+    //统计信息相关
+    calThread = new QThread();
+    calMeanStd_obj = new calMeanStdThread(); //
+    calMeanStd_obj->moveToThread(calThread);
+    calThread->start();
+
 }
 
 
@@ -55,6 +70,15 @@ void MainWindow::init_connect()
     connect(this,&MainWindow::change_tof_peak_signal,dealMsg_obj,&DealUsb_msg::change_tof_peak_slot);
     connect(this,&MainWindow::isFilter_signal,dealMsg_obj,&DealUsb_msg::isFilter_slot);
 
+
+    //文件保存相关的信号与槽的连接
+    connect(&fileSave_dia,&fileSave_Dialog::isSaveFlagSignal,this,&MainWindow::isSaveFlagSlot);
+    connect(dealMsg_obj,&DealUsb_msg::saveTXTSignal,savePcd_obj,&savePCDThread::saveTXTSlot);
+
+    //统计信息相关的槽函数
+    connect(calMeanStd_obj,SIGNAL(statistic_MeanStdSignal(QStringList,QStringList,QStringList,QStringList)),&statisticsDia_,SLOT(statistic_MeanStdSlot(QStringList,QStringList,QStringList,QStringList)));
+    connect(&statisticsDia_,SIGNAL(startStop_signal(int)),calMeanStd_obj,SLOT(startStop_slot(int)));
+    connect(&statisticsDia_,SIGNAL(alterStatisticFrameNum_signal(int)),dealMsg_obj,SLOT(alterStatisticFrameNum_slot(int)));
 
 }
 
@@ -113,7 +137,7 @@ void MainWindow::on_play_pushButton_clicked()
 {
     if(ui->play_pushButton->text() == "play")
     {
-        ui->widget->show3D_timer.start(90);
+        ui->widget->show3D_timer.start(90);   //3D点云的刷新频率
         ui->play_pushButton->setText("pause");
     }else
     {
@@ -162,8 +186,44 @@ void MainWindow::on_filter_radioButton_clicked()
     emit isFilter_signal(isChecked);
 }
 
+//!
+//! \brief MainWindow::on_statistic_action_triggered
+//!统计信息 弹出界面函数
+void MainWindow::on_statistic_action_triggered()
+{
+    QMessageBox::warning(NULL,QStringLiteral("提示"),QStringLiteral("该功能需要管理员权限，否则可能会异常退出"));
+    statisticsDia_.setModal(true);
+    statisticsDia_.show();
+}
+
+//!
+//! \brief MainWindow::on_saveFile_action_triggered
+//!文件保存界面 弹出
+void MainWindow::on_saveFile_action_triggered()
+{
+    fileSave_dia.setModal(true);
+    fileSave_dia.show();
+}
+
+//!
+//! \brief isSaveFlagSlot
+//! 文件保存 接收的槽函数
+void MainWindow::isSaveFlagSlot(bool flag,QString filePath,int fileFormat)
+{
+
+
+   isSaveFlag = flag;        //是否进行存储
+   saveFilePath = filePath;   //保存的路径  E:/..../.../的形式
+   saveFileIndex = 1;      //文件标号；1作为开始
+}
+
+
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+
+
+

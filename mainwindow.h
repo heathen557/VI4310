@@ -4,7 +4,11 @@
 #include <QMainWindow>
 #include"globaldata.h"
 #include"dealusb_msg.h"
-
+#include"savepcdthread.h"
+#include"statisticsdialog.h"
+#include"filesave_dialog.h"
+#include"savepcdthread.h"
+#include"calmeanstdthread.h"
 
 
 namespace Ui {
@@ -39,16 +43,35 @@ private slots:
 
     void on_filter_radioButton_clicked();
 
+    void on_statistic_action_triggered();
+
+    void on_saveFile_action_triggered();
+
+    void isSaveFlagSlot(bool,QString,int);       //是否保存标识；存储路径；文件类型（预留）
+
 signals:
     void change_gain_signal(float);
     void change_tof_peak_signal();
     void isFilter_signal(bool);
 
 private:
-    QThread *dealMsg_thread;
+    QThread *dealMsg_thread;      //数据处理线程
     DealUsb_msg *dealMsg_obj;
 
-    QString localFileDirPath;
+    QThread *savePcd_thread;      //文件保存线程
+    savePCDThread* savePcd_obj;
+
+    calMeanStdThread *calMeanStd_obj; //
+    QThread *calThread;
+
+    QString localFileDirPath;    //本地播放文件
+
+    statisticsDialog  statisticsDia_; //统计信息界面
+
+    fileSave_Dialog fileSave_dia;
+
+
+
 
     Ui::MainWindow *ui;
 };

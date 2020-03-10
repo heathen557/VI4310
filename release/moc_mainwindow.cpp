@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[12];
-    char stringdata0[246];
+    QByteArrayData data[15];
+    char stringdata0[320];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,7 +42,10 @@ QT_MOC_LITERAL(7, 91, 28), // "on_openFile_action_triggered"
 QT_MOC_LITERAL(8, 120, 26), // "on_play_pushButton_clicked"
 QT_MOC_LITERAL(9, 147, 37), // "on_tof_peak_change_toolButton..."
 QT_MOC_LITERAL(10, 185, 30), // "on_gain_lineEdit_returnPressed"
-QT_MOC_LITERAL(11, 216, 29) // "on_filter_radioButton_clicked"
+QT_MOC_LITERAL(11, 216, 29), // "on_filter_radioButton_clicked"
+QT_MOC_LITERAL(12, 246, 29), // "on_statistic_action_triggered"
+QT_MOC_LITERAL(13, 276, 28), // "on_saveFile_action_triggered"
+QT_MOC_LITERAL(14, 305, 14) // "isSaveFlagSlot"
 
     },
     "MainWindow\0change_gain_signal\0\0"
@@ -51,7 +54,10 @@ QT_MOC_LITERAL(11, 216, 29) // "on_filter_radioButton_clicked"
     "on_play_pushButton_clicked\0"
     "on_tof_peak_change_toolButton_clicked\0"
     "on_gain_lineEdit_returnPressed\0"
-    "on_filter_radioButton_clicked"
+    "on_filter_radioButton_clicked\0"
+    "on_statistic_action_triggered\0"
+    "on_saveFile_action_triggered\0"
+    "isSaveFlagSlot"
 };
 #undef QT_MOC_LITERAL
 
@@ -61,7 +67,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -69,17 +75,20 @@ static const uint qt_meta_data_MainWindow[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   59,    2, 0x06 /* Public */,
-       3,    0,   62,    2, 0x06 /* Public */,
-       4,    1,   63,    2, 0x06 /* Public */,
+       1,    1,   74,    2, 0x06 /* Public */,
+       3,    0,   77,    2, 0x06 /* Public */,
+       4,    1,   78,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    1,   66,    2, 0x08 /* Private */,
-       7,    0,   69,    2, 0x08 /* Private */,
-       8,    0,   70,    2, 0x08 /* Private */,
-       9,    0,   71,    2, 0x08 /* Private */,
-      10,    0,   72,    2, 0x08 /* Private */,
-      11,    0,   73,    2, 0x08 /* Private */,
+       5,    1,   81,    2, 0x08 /* Private */,
+       7,    0,   84,    2, 0x08 /* Private */,
+       8,    0,   85,    2, 0x08 /* Private */,
+       9,    0,   86,    2, 0x08 /* Private */,
+      10,    0,   87,    2, 0x08 /* Private */,
+      11,    0,   88,    2, 0x08 /* Private */,
+      12,    0,   89,    2, 0x08 /* Private */,
+      13,    0,   90,    2, 0x08 /* Private */,
+      14,    3,   91,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Float,    2,
@@ -93,6 +102,9 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Bool, QMetaType::QString, QMetaType::Int,    2,    2,    2,
 
        0        // eod
 };
@@ -112,6 +124,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 6: _t->on_tof_peak_change_toolButton_clicked(); break;
         case 7: _t->on_gain_lineEdit_returnPressed(); break;
         case 8: _t->on_filter_radioButton_clicked(); break;
+        case 9: _t->on_statistic_action_triggered(); break;
+        case 10: _t->on_saveFile_action_triggered(); break;
+        case 11: _t->isSaveFlagSlot((*reinterpret_cast< bool(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -166,13 +181,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 9)
+        if (_id < 12)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 9;
+        _id -= 12;
     }
     return _id;
 }

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui datavisualization multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -30,7 +30,12 @@ SOURCES += main.cpp\
     glwidget.cpp \
     logo.cpp \
     dealusb_msg.cpp \
-    globaldata.cpp
+    globaldata.cpp \
+    savepcdthread.cpp \
+    statisticsdialog.cpp \
+    surfacegraph.cpp \
+    filesave_dialog.cpp \
+    calmeanstdthread.cpp
 
 
 
@@ -40,9 +45,16 @@ HEADERS  += mainwindow.h \
     globaldata.h \
     glwidget.h \
     logo.h \
-    dealusb_msg.h
+    dealusb_msg.h \
+    savepcdthread.h \
+    statisticsdialog.h \
+    surfacegraph.h \
+    filesave_dialog.h \
+    calmeanstdthread.h
 
 FORMS    += mainwindow.ui\
+    statisticsdialog.ui \
+    filesave_dialog.ui
 
 
 RESOURCES += \

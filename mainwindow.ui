@@ -147,7 +147,14 @@
     <addaction name="openFile_action"/>
     <addaction name="saveFile_action"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>调试</string>
+    </property>
+    <addaction name="statistic_action"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -158,6 +165,7 @@
    </attribute>
    <addaction name="openFile_action"/>
    <addaction name="saveFile_action"/>
+   <addaction name="statistic_action"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="left_dockWidget">
@@ -327,7 +335,7 @@
           <x>0</x>
           <y>0</y>
           <width>300</width>
-          <height>433</height>
+          <height>392</height>
          </rect>
         </property>
         <attribute name="label">
@@ -353,7 +361,7 @@
           <x>0</x>
           <y>0</y>
           <width>300</width>
-          <height>433</height>
+          <height>392</height>
          </rect>
         </property>
         <attribute name="label">
@@ -405,9 +413,24 @@
     <string>保存文件</string>
    </property>
   </action>
+  <action name="statistic_action">
+   <property name="icon">
+    <iconset resource="imgsource.qrc">
+     <normaloff>:/new/prefix1/images/ccHistogram.png</normaloff>:/new/prefix1/images/ccHistogram.png</iconset>
+   </property>
+   <property name="text">
+    <string>统计信息</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
+  <customwidget>
+   <class>GLWidget</class>
+   <extends>QWidget</extends>
+   <header>glwidget.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>myLabel</class>
    <extends>QLabel</extends>
@@ -417,12 +440,6 @@
    <class>Control_textEdit</class>
    <extends>QTextEdit</extends>
    <header>control_textedit.h</header>
-  </customwidget>
-  <customwidget>
-   <class>GLWidget</class>
-   <extends>QWidget</extends>
-   <header>glwidget.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
