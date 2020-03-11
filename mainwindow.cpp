@@ -259,10 +259,30 @@ void MainWindow::save3DSettingFile()
 
 }
 
+//显示  peak的阈值
+void MainWindow::on_peakOffset_lineEdit_returnPressed()
+{
+    int peakOffset = ui->peakOffset_lineEdit->text().toInt();
+    dealMsg_obj->peakOffset = peakOffset;
+}
+//显示  平均的帧数
+void MainWindow::on_averageNum_lineEdit_returnPressed()
+{
+    int average_frameNum = ui->averageNum_lineEdit->text().toInt();
+    dealMsg_obj->averageNum = average_frameNum;
+}
+//显示 只显示中心区域
+void MainWindow::on_centerShowYes_radioButton_clicked()
+{
+    dealMsg_obj->isOnlyCenterShow_flag = true;
+}
+//显示 不显示中心区域
+void MainWindow::on_centerShowNo_radioButton_clicked()
+{
+    dealMsg_obj->isOnlyCenterShow_flag = false;
+}
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
-

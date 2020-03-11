@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[20];
-    char stringdata0[466];
+    QByteArrayData data[24];
+    char stringdata0[613];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -50,7 +50,11 @@ QT_MOC_LITERAL(15, 320, 38), // "on_rotate_horizontalSlider_sl..."
 QT_MOC_LITERAL(16, 359, 8), // "position"
 QT_MOC_LITERAL(17, 368, 37), // "on_scale_horizontalSlider_sli..."
 QT_MOC_LITERAL(18, 406, 41), // "on_translate_horizontalSlider..."
-QT_MOC_LITERAL(19, 448, 17) // "save3DSettingFile"
+QT_MOC_LITERAL(19, 448, 17), // "save3DSettingFile"
+QT_MOC_LITERAL(20, 466, 36), // "on_peakOffset_lineEdit_return..."
+QT_MOC_LITERAL(21, 503, 36), // "on_averageNum_lineEdit_return..."
+QT_MOC_LITERAL(22, 540, 36), // "on_centerShowYes_radioButton_..."
+QT_MOC_LITERAL(23, 577, 35) // "on_centerShowNo_radioButton_c..."
 
     },
     "MainWindow\0change_gain_signal\0\0"
@@ -65,7 +69,11 @@ QT_MOC_LITERAL(19, 448, 17) // "save3DSettingFile"
     "isSaveFlagSlot\0on_rotate_horizontalSlider_sliderMoved\0"
     "position\0on_scale_horizontalSlider_sliderMoved\0"
     "on_translate_horizontalSlider_sliderMoved\0"
-    "save3DSettingFile"
+    "save3DSettingFile\0"
+    "on_peakOffset_lineEdit_returnPressed\0"
+    "on_averageNum_lineEdit_returnPressed\0"
+    "on_centerShowYes_radioButton_clicked\0"
+    "on_centerShowNo_radioButton_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -75,7 +83,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      20,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -83,24 +91,28 @@ static const uint qt_meta_data_MainWindow[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   94,    2, 0x06 /* Public */,
-       3,    0,   97,    2, 0x06 /* Public */,
-       4,    1,   98,    2, 0x06 /* Public */,
+       1,    1,  114,    2, 0x06 /* Public */,
+       3,    0,  117,    2, 0x06 /* Public */,
+       4,    1,  118,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       5,    1,  101,    2, 0x08 /* Private */,
-       7,    0,  104,    2, 0x08 /* Private */,
-       8,    0,  105,    2, 0x08 /* Private */,
-       9,    0,  106,    2, 0x08 /* Private */,
-      10,    0,  107,    2, 0x08 /* Private */,
-      11,    0,  108,    2, 0x08 /* Private */,
-      12,    0,  109,    2, 0x08 /* Private */,
-      13,    0,  110,    2, 0x08 /* Private */,
-      14,    3,  111,    2, 0x08 /* Private */,
-      15,    1,  118,    2, 0x08 /* Private */,
-      17,    1,  121,    2, 0x08 /* Private */,
-      18,    1,  124,    2, 0x08 /* Private */,
-      19,    0,  127,    2, 0x08 /* Private */,
+       5,    1,  121,    2, 0x08 /* Private */,
+       7,    0,  124,    2, 0x08 /* Private */,
+       8,    0,  125,    2, 0x08 /* Private */,
+       9,    0,  126,    2, 0x08 /* Private */,
+      10,    0,  127,    2, 0x08 /* Private */,
+      11,    0,  128,    2, 0x08 /* Private */,
+      12,    0,  129,    2, 0x08 /* Private */,
+      13,    0,  130,    2, 0x08 /* Private */,
+      14,    3,  131,    2, 0x08 /* Private */,
+      15,    1,  138,    2, 0x08 /* Private */,
+      17,    1,  141,    2, 0x08 /* Private */,
+      18,    1,  144,    2, 0x08 /* Private */,
+      19,    0,  147,    2, 0x08 /* Private */,
+      20,    0,  148,    2, 0x08 /* Private */,
+      21,    0,  149,    2, 0x08 /* Private */,
+      22,    0,  150,    2, 0x08 /* Private */,
+      23,    0,  151,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Float,    2,
@@ -120,6 +132,10 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, QMetaType::Int,   16,
     QMetaType::Void, QMetaType::Int,   16,
     QMetaType::Void, QMetaType::Int,   16,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -147,6 +163,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 13: _t->on_scale_horizontalSlider_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 14: _t->on_translate_horizontalSlider_sliderMoved((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 15: _t->save3DSettingFile(); break;
+        case 16: _t->on_peakOffset_lineEdit_returnPressed(); break;
+        case 17: _t->on_averageNum_lineEdit_returnPressed(); break;
+        case 18: _t->on_centerShowYes_radioButton_clicked(); break;
+        case 19: _t->on_centerShowNo_radioButton_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -201,13 +221,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 20)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 20;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 16)
+        if (_id < 20)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 16;
+        _id -= 20;
     }
     return _id;
 }

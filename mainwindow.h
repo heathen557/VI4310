@@ -57,6 +57,14 @@ private slots:
 
     void save3DSettingFile();
 
+    void on_peakOffset_lineEdit_returnPressed();
+
+    void on_averageNum_lineEdit_returnPressed();
+
+    void on_centerShowYes_radioButton_clicked();
+
+    void on_centerShowNo_radioButton_clicked();
+
 signals:
     void change_gain_signal(float);
     void change_tof_peak_signal();
