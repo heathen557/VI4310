@@ -1,8 +1,8 @@
 ﻿#include "logo.h"
 
 
-pcl::PointCloud<pcl::PointXYZRGB> pointCloudRgb;
-bool  isShowPointCloud;
+extern pcl::PointCloud<pcl::PointXYZRGB> pointCloudRgb;
+extern bool  isShowPointCloud;
 extern QMutex mutex_3D;
 
 //字符串解析，读取pcd文件时候用

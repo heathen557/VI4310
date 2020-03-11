@@ -1,16 +1,17 @@
 ﻿#include "dealusb_msg.h"
 
 
-
+//图像显示相关
 extern QMutex mutex_3D;  //3D点云/2D传输的互斥锁
-QImage tofImage;
-QImage intensityImage;
+extern QImage tofImage;
+extern QImage intensityImage;
 extern pcl::PointCloud<pcl::PointXYZRGB> pointCloudRgb;
 extern bool isShowPointCloud;  //是否有点云数据 ，有的话显示否则不显示
 
-QMutex mouseShowMutex;
-float mouseShowTOF[256][64];
-int mouseShowPEAK[256][64];
+//鼠标点击显示时相关
+extern QMutex mouseShowMutex;
+extern float mouseShowTOF[256][64];
+extern int mouseShowPEAK[256][64];
 
 /*保存用到的标识*/
 extern bool isSaveFlag;        //是否进行存储

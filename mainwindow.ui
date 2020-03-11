@@ -246,6 +246,9 @@
           <property name="text">
            <string/>
           </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>
@@ -270,6 +273,9 @@
           </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
           </property>
          </widget>
         </item>

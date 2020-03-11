@@ -7,6 +7,18 @@
 
 using namespace std;
 
+//图像显示相关
+extern QMutex mutex_3D;  //3D点云/2D传输的互斥锁
+extern QImage tofImage;
+extern QImage intensityImage;
+extern pcl::PointCloud<pcl::PointXYZRGB> pointCloudRgb;
+extern bool isShowPointCloud;  //是否有点云数据 ，有的话显示否则不显示
+
+//鼠标点击显示时相关
+extern QMutex mouseShowMutex;
+extern float mouseShowTOF[256][64];
+extern int mouseShowPEAK[256][64];
+
 /*保存用到的标识*/
 extern bool isSaveFlag;        //是否进行存储
 extern QString saveFilePath;   //保存的路径  E:/..../.../的形式
@@ -80,6 +92,12 @@ void MainWindow::init_connect()
     connect(&statisticsDia_,SIGNAL(startStop_signal(int)),calMeanStd_obj,SLOT(startStop_slot(int)));
     connect(&statisticsDia_,SIGNAL(alterStatisticFrameNum_signal(int)),dealMsg_obj,SLOT(alterStatisticFrameNum_slot(int)));
 
+    //2D图像的显示相关
+    connect(&show_image_timer,SIGNAL(timeout()),this,SLOT(show_image_timer_slot()));
+
+    //鼠标停靠处显示
+    connect(ui->tof_label,SIGNAL(queryPixSignal(int,int)),this,SLOT(queryPixel_showToolTip_slot(int,int)));
+    connect(ui->peak_label,SIGNAL(queryPixSignal(int,int)),this,SLOT(queryPixel_showToolTip_slot(int,int)));
 }
 
 //!
@@ -137,21 +155,66 @@ void MainWindow::on_openFile_action_triggered()
 
 //!
 //! \brief MainWindow::on_play_pushButton_clicked
-//!播放图像的槽函数
+//!开启播放图像的槽函数
 void MainWindow::on_play_pushButton_clicked()
 {
     if(ui->play_pushButton->text() == "play")
     {
         ui->widget->show3D_timer.start(90);   //3D点云的刷新频率
+        show_image_timer.start(90);
         ui->play_pushButton->setText("pause");
     }else
     {
         ui->widget->show3D_timer.stop();
+        show_image_timer.stop();
         ui->play_pushButton->setText("play");
     }
 }
 
 
+//!
+//! \brief MainWindow::show_image_timer_slot
+//! 播放2D图像的槽函数
+void MainWindow::show_image_timer_slot()
+{
+    if(!isShowPointCloud)
+        return;
+
+    if(!tofImage.isNull() && !intensityImage.isNull())
+    {
+        mutex_3D.lock();
+        QPixmap pixmap_tof(QPixmap::fromImage (tofImage));
+        ui->tof_label->setPixmap(pixmap_tof);
+
+        QPixmap pixmap_peak(QPixmap::fromImage (intensityImage));
+        ui->peak_label->setPixmap(pixmap_peak);
+        mutex_3D.unlock();
+    }
+}
+
+
+//! \brief MainWindow::queryPixel_showToolTip_slot
+//! \param x   实际的x坐标值  缩放以后的
+//! \param y   实际的y坐标值  缩放以后的
+//!  鼠标停靠处显示tof和peak
+void MainWindow::queryPixel_showToolTip_slot(int x,int y)
+{
+
+    float width_scale = ui->tof_label->width()/256.0;
+    float height_scale = ui->tof_label->height()/64.0;
+
+    int y_index = y/height_scale;
+    int x_index = x/width_scale;
+    qDebug()<<"y_index="<<y_index<<"  x_index ="<<x_index;
+
+    int index = 256*y_index + x_index;
+
+    mouseShowMutex.lock();
+    QString str= "x="+QString::number(x_index)+",y="+QString::number(y_index)+",Depth="+QString::number(mouseShowTOF[x_index][y_index])+"m,peak="+QString::number(mouseShowPEAK[x_index][y_index]);
+    mouseShowMutex.unlock();
+
+    QToolTip::showText(QCursor::pos(),str);
+}
 
 
 //!

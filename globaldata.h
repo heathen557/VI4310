@@ -32,6 +32,7 @@
 #include<QFile>
 #include<QThread>
 #include<QSettings>
+#include<QToolTip>
 
 
 

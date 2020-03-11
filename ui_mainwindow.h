@@ -291,6 +291,7 @@ public:
         tof_label = new myLabel(groupBox_2);
         tof_label->setObjectName(QStringLiteral("tof_label"));
         tof_label->setStyleSheet(QStringLiteral("background-color: rgb(0, 0, 0);"));
+        tof_label->setScaledContents(true);
 
         gridLayout_2->addWidget(tof_label, 0, 0, 1, 1);
 
@@ -308,6 +309,7 @@ public:
         peak_label = new myLabel(groupBox_3);
         peak_label->setObjectName(QStringLiteral("peak_label"));
         peak_label->setStyleSheet(QStringLiteral("background-color: rgb(0, 0, 0);"));
+        peak_label->setScaledContents(true);
 
         gridLayout_3->addWidget(peak_label, 0, 0, 1, 1);
 

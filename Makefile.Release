@@ -2802,6 +2802,8 @@ release\moc_mainwindow.cpp: ..\..\programInstall\QT580\5.8\msvc2015_64\include\Q
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		dealusb_msg.h \
 		savepcdthread.h \
 		statisticsdialog.h \
@@ -5609,6 +5611,8 @@ release\moc_glwidget.cpp: ..\..\programInstall\QT580\5.8\msvc2015_64\include\QtW
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QVector \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\QVector3D \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QApplication \
@@ -8061,6 +8065,8 @@ release\moc_logo.cpp: globaldata.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qopengl.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qt_windows.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3.h \
@@ -10523,6 +10529,8 @@ release\moc_dealusb_msg.cpp: globaldata.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		dealusb_msg.h \
 		release\moc_predefs.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\bin\moc.exe
@@ -15222,6 +15230,8 @@ release\moc_filesave_dialog.cpp: globaldata.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QDialog \
 		filesave_dialog.h \
 		release\moc_predefs.h \
@@ -17763,6 +17773,8 @@ ui_mainwindow.h: mainwindow.ui \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QVector \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\QVector3D \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QApplication \
@@ -20449,6 +20461,8 @@ release\main.obj: main.cpp mainwindow.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		dealusb_msg.h \
 		savepcdthread.h \
 		statisticsdialog.h \
@@ -23005,6 +23019,8 @@ release\mainwindow.obj: mainwindow.cpp mainwindow.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		dealusb_msg.h \
 		savepcdthread.h \
 		statisticsdialog.h \
@@ -25849,6 +25865,8 @@ release\glwidget.obj: glwidget.cpp glwidget.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QVector \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\QVector3D \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QApplication \
@@ -28308,6 +28326,8 @@ release\logo.obj: logo.cpp logo.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qopengl.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qt_windows.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtANGLE\GLES3\gl3.h \
@@ -30766,7 +30786,9 @@ release\dealusb_msg.obj: dealusb_msg.cpp dealusb_msg.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\QImage \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
-		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h
 
 release\globaldata.obj: globaldata.cpp globaldata.h \
 		mylabel.h \
@@ -33205,7 +33227,9 @@ release\globaldata.obj: globaldata.cpp globaldata.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\QImage \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
-		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h
 
 release\savepcdthread.obj: savepcdthread.cpp savepcdthread.h \
 		..\..\pcl\PCL1.8.1\include\pcl-1.8\pcl\io\pcd_io.h \
@@ -37936,6 +37960,8 @@ release\filesave_dialog.obj: filesave_dialog.cpp filesave_dialog.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QFile \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QThread \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qthread.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QToolTip \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtooltip.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QDialog \
 		ui_filesave_dialog.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QVariant \

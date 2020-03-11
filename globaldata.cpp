@@ -1,7 +1,6 @@
 ﻿#include"globaldata.h"
 
 using namespace std;
-QMutex mutex_3D;
 
 /*保存用到的标识*/
 bool isSaveFlag;        //是否进行存储
@@ -12,3 +11,15 @@ int saveFileIndex;      //文件标号；1作为开始
 QMutex statisticMutex;
 vector<vector<int>> allStatisticTofPoints;   //用于统计 均值和方差的 容器  TOF
 vector<vector<int>> allStatisticPeakPoints;   //用于统计 均值和方差的 容器  TOF
+
+//3D 2D图像显示相关
+QMutex mutex_3D;  //3D点云/2D传输的互斥锁
+QImage tofImage;
+QImage intensityImage;
+pcl::PointCloud<pcl::PointXYZRGB> pointCloudRgb;
+bool isShowPointCloud;  //是否有点云数据 ，有的话显示否则不显示
+
+//鼠标点击显示时相关
+QMutex mouseShowMutex;
+float mouseShowTOF[256][64];
+int mouseShowPEAK[256][64];

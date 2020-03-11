@@ -11,6 +11,7 @@
 #include"calmeanstdthread.h"
 
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -35,7 +36,11 @@ private slots:
 
     void on_openFile_action_triggered();  //打开 本地文件TOF\PEAK
 
-    void on_play_pushButton_clicked();   //播放 3D
+    void on_play_pushButton_clicked();   //播放 3D、2D  ，打开相关的定时器
+
+    void show_image_timer_slot();       //播放2D图像的槽函数
+
+    void queryPixel_showToolTip_slot(int x,int y);  //鼠标停靠处显示TOF 和 peak信息
 
     void on_tof_peak_change_toolButton_clicked();
 
@@ -65,6 +70,10 @@ private slots:
 
     void on_centerShowNo_radioButton_clicked();
 
+
+
+
+
 signals:
     void change_gain_signal(float);
     void change_tof_peak_signal();
@@ -84,7 +93,9 @@ private:
 
     statisticsDialog  statisticsDia_; //统计信息界面
 
-    fileSave_Dialog fileSave_dia;
+    fileSave_Dialog fileSave_dia;     //文件保存界面
+
+    QTimer show_image_timer;
 
 
 
