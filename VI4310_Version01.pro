@@ -22,6 +22,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+LIBS += "libusb.lib"
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -35,7 +36,8 @@ SOURCES += main.cpp\
     statisticsdialog.cpp \
     surfacegraph.cpp \
     filesave_dialog.cpp \
-    calmeanstdthread.cpp
+    calmeanstdthread.cpp \
+    receusb_msg.cpp
 
 
 
@@ -50,7 +52,8 @@ HEADERS  += mainwindow.h \
     statisticsdialog.h \
     surfacegraph.h \
     filesave_dialog.h \
-    calmeanstdthread.h
+    calmeanstdthread.h \
+    receusb_msg.h
 
 FORMS    += mainwindow.ui\
     statisticsdialog.ui \

@@ -24,11 +24,16 @@ extern bool isSaveFlag;        //是否进行存储
 extern QString saveFilePath;   //保存的路径  E:/..../.../的形式
 extern int saveFileIndex;      //文件标号；1作为开始
 
+/*****是否进行数据接收的标识*****/
+extern bool isRecvFlag;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    isLinkSuccess = false;     //USB 连接是否成功的标识
 
 #ifndef SHOW_HISTORGRAM_BUTTON
     ui->tof_Histogram_pushButton->setVisible(false);
@@ -38,12 +43,17 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tof_peak_change_toolButton->setVisible(false);
 #endif
 
+
     init_thread();
     init_connect();
     load_ini_file();
     dealMsg_obj->loadLocalArray();   //接收数据线程中 加载角度矩阵的矫正文件
 }
 
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
 
 //!
 //! \brief init_thread
@@ -67,6 +77,13 @@ void MainWindow::init_thread()
     calMeanStd_obj = new calMeanStdThread(); //
     calMeanStd_obj->moveToThread(calThread);
     calThread->start();
+
+    //USB数据接收相关
+    recvUsb_thread = new QThread();
+    recvUsbMsg_obj = new ReceUSB_Msg();
+    recvUsbMsg_obj->moveToThread(recvUsb_thread);
+    recvUsb_thread->start();
+
 
 }
 
@@ -98,6 +115,23 @@ void MainWindow::init_connect()
     //鼠标停靠处显示
     connect(ui->tof_label,SIGNAL(queryPixSignal(int,int)),this,SLOT(queryPixel_showToolTip_slot(int,int)));
     connect(ui->peak_label,SIGNAL(queryPixSignal(int,int)),this,SLOT(queryPixel_showToolTip_slot(int,int)));
+
+    //USB设备连接相关
+    connect(this,SIGNAL(openLink_signal(int,int)),recvUsbMsg_obj,SLOT(openLinkDevSlot(int,int)));
+    connect(recvUsbMsg_obj,SIGNAL(Display_log_signal(QString)),this,SLOT(Display_log_slot(QString)));
+    connect(recvUsbMsg_obj,SIGNAL(linkInfoSignal(int)),this,SLOT(USB_linkInfoSlot(int)));
+    connect(this,SIGNAL(readSysSignal(int,bool)),recvUsbMsg_obj,SLOT(readSysSlot(int,bool)));
+    connect(recvUsbMsg_obj,&ReceUSB_Msg::reReadSysSignal,this,&MainWindow::reReadSysSlot);
+    connect(this,&MainWindow::writeSysSignal,recvUsbMsg_obj,&ReceUSB_Msg::writeSysSlot);
+    connect(this,&MainWindow::loadSettingSignal,recvUsbMsg_obj,&ReceUSB_Msg::loadSettingSlot);
+    connect(this,&MainWindow::start_read_usb_signal,recvUsbMsg_obj,&ReceUSB_Msg::read_usb);
+
+
+    //数据接收 与数据处理线程
+    connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal(QByteArray)),dealMsg_obj,SLOT(recvMsgSlot(QByteArray)));
+
+
+
 }
 
 //!
@@ -163,11 +197,22 @@ void MainWindow::on_play_pushButton_clicked()
         ui->widget->show3D_timer.start(90);   //3D点云的刷新频率
         show_image_timer.start(90);
         ui->play_pushButton->setText("pause");
+
+        if(isLinkSuccess)
+        {
+           isRecvFlag = true;
+           emit start_read_usb_signal();
+           QString log_str = "[video start]";
+           Display_log_slot(log_str);
+        }
+
     }else
     {
         ui->widget->show3D_timer.stop();
         show_image_timer.stop();
         ui->play_pushButton->setText("play");
+        QString log_str = "[video stop]";
+        Display_log_slot(log_str);
     }
 }
 
@@ -205,14 +250,11 @@ void MainWindow::queryPixel_showToolTip_slot(int x,int y)
 
     int y_index = y/height_scale;
     int x_index = x/width_scale;
-    qDebug()<<"y_index="<<y_index<<"  x_index ="<<x_index;
-
+//    qDebug()<<"y_index="<<y_index<<"  x_index ="<<x_index;
     int index = 256*y_index + x_index;
-
     mouseShowMutex.lock();
     QString str= "x="+QString::number(x_index)+",y="+QString::number(y_index)+",Depth="+QString::number(mouseShowTOF[x_index][y_index])+"m,peak="+QString::number(mouseShowPEAK[x_index][y_index]);
     mouseShowMutex.unlock();
-
     QToolTip::showText(QCursor::pos(),str);
 }
 
@@ -345,7 +387,180 @@ void MainWindow::on_centerShowNo_radioButton_clicked()
     dealMsg_obj->isOnlyCenterShow_flag = false;
 }
 
-MainWindow::~MainWindow()
+
+
+
+/********************************************  USB 配置相关的槽函数   ********************************************************************/
+//!
+//! \brief MainWindow::on_linkUSB_pushButton_clicked
+//!连接USB 设备的槽函数
+void MainWindow::on_linkUSB_pushButton_clicked()
 {
-    delete ui;
+
+    if(ui->linkUSB_pushButton->text() == QStringLiteral("连接设备"))
+    {
+        int vid = ui->VID_lineEdit->text().toInt(NULL,16);
+        int pid = ui->PID_lineEdit->text().toInt(NULL,16);
+        emit openLink_signal(vid,pid);
+
+    }else if(ui->linkUSB_pushButton->text() == QStringLiteral("关闭连接"))
+    {
+        isRecvFlag = false;
+        isLinkSuccess = false;
+        emit closeLinkSignal();
+        ui->linkUSB_pushButton->setText(QStringLiteral("连接设备"));
+    }
+}
+//!
+//! \brief MainWindow::on_readSys_pushButton_clicked
+//! 读取系统寄存器的额槽函数
+void MainWindow::on_readSys_pushButton_clicked()
+{
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
+    int address = ui->sysAddress_lineEdit->text().toInt(NULL,16);
+
+    if(isRecvFlag)
+    {
+        isRecvFlag = false;
+        emit readSysSignal(address,true);
+    }else
+    {
+        emit readSysSignal(address,false);
+    }
+}
+
+//!
+//! \brief MainWindow::reReadSysSlot   //读取sys的返回结果
+//! \param str
+//!
+void MainWindow::reReadSysSlot(QString str)
+{
+    int m = str.toInt();
+    qDebug()<<" the data =  "<<m<<endl;
+    ui->sysData_lineEdit->setText(QString::number(m,16));
+}
+
+
+
+//!
+//! \brief MainWindow::on_writeSys_pushButton_clicked
+//!写入系统寄存器的槽函数
+void MainWindow::on_writeSys_pushButton_clicked()
+{
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
+    int address = ui->sysAddress_lineEdit->text().toInt(NULL,16);
+    QString data = ui->sysData_lineEdit->text();
+
+    if(isRecvFlag)
+    {
+        isRecvFlag = false;
+        emit writeSysSignal(address,data,true);
+    }else
+    {
+        emit writeSysSignal(address,data,false);
+    }
+    ui->sysData_lineEdit->clear();
+
+}
+//!
+//! \brief MainWindow::on_loadSetting_pushButton_clicked
+//!加载配置集的槽函数
+void MainWindow::on_loadSetting_pushButton_clicked()
+{
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
+
+
+    QString file_path;
+    //定义文件对话框类
+    QFileDialog *fileDialog = new QFileDialog(this);
+    //定义文件对话框标题
+    fileDialog->setWindowTitle(QStringLiteral("请选择寄存器配置文件"));
+    //设置默认文件路径
+    fileDialog->setDirectory(".");
+    //设置视图模式
+    fileDialog->setViewMode(QFileDialog::Detail);
+    //打印所有选择的文件的路径
+
+    QStringList mimeTypeFilters;
+    mimeTypeFilters <<QStringLiteral("芯片配置文件(*.para)|*.para") ;
+    fileDialog->setNameFilters(mimeTypeFilters);
+
+    QStringList fileNames;
+    if(fileDialog->exec())
+    {
+        fileNames = fileDialog->selectedFiles();
+    }else
+    {
+        return;
+    }
+
+
+    file_path = fileNames[0];
+    qDebug()<<" file_path = "<<fileNames[0]<<endl;
+
+    QString checkStr = file_path.right(4);
+    if("para" != checkStr)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("请选择正确的配置文件！"));
+        return ;
+    }
+
+    if(isRecvFlag)
+    {
+        isRecvFlag = true;
+        emit loadSettingSignal(file_path,true);
+    }else
+    {
+        emit loadSettingSignal(file_path,false);
+    }
+
+}
+//!
+//! \brief MainWindow::on_saveSetting_pushButton_clicked
+//!保存配置集的槽函数
+void MainWindow::on_saveSetting_pushButton_clicked()
+{
+    if(!isLinkSuccess)
+    {
+        QMessageBox::information(NULL,QStringLiteral("告警"),QStringLiteral("设备未连接"));
+        return;
+    }
+}
+
+//!
+//! \brief MainWindow::USB_linkInfoSlot
+//! \param flag
+//!USB 连接的返回信息
+//! //向主线程发送链接信息（错误警告）
+// 0：连接正常 1没找到设备
+// 2:没有接收到数据  3打开设备失败
+// 4：读取系统成功；5：读取系统失败；
+// 6：读取设备成功；7：读取设备失败
+// 8：加载配置信息成功；9：加载配置信息失败
+// 10：保存配置信息成功； 11：保存配置信息失败
+// 12：写入系统成功      13：写入系统失败
+// 14：写入设备成功      15：写入设备失败
+void MainWindow::USB_linkInfoSlot(int flag )
+{
+    if(0 == flag)     //连接正常
+    {
+        ui->linkUSB_pushButton->setText(QStringLiteral("关闭设备"));
+        isLinkSuccess = true;
+    }else if(3==flag)   //连接设备失败
+    {
+        isLinkSuccess = false;
+        ui->linkUSB_pushButton->setText(QStringLiteral("连接设备"));
+    }
 }

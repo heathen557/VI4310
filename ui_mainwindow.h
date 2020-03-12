@@ -31,6 +31,7 @@
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QToolBox>
 #include <QtWidgets/QToolButton>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "control_textedit.h"
 #include "glwidget.h"
@@ -89,6 +90,33 @@ public:
     QToolBox *config_toolBox;
     QWidget *page;
     QPushButton *play_pushButton;
+    QGroupBox *groupBox_6;
+    QGridLayout *gridLayout_8;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *label_2;
+    QLineEdit *VID_lineEdit;
+    QHBoxLayout *horizontalLayout_5;
+    QLabel *label_3;
+    QLineEdit *PID_lineEdit;
+    QHBoxLayout *horizontalLayout_7;
+    QSpacerItem *horizontalSpacer_7;
+    QPushButton *linkUSB_pushButton;
+    QGroupBox *groupBox_7;
+    QGridLayout *gridLayout_9;
+    QHBoxLayout *horizontalLayout_6;
+    QLabel *label_4;
+    QLineEdit *sysAddress_lineEdit;
+    QHBoxLayout *horizontalLayout_8;
+    QLabel *label_5;
+    QLineEdit *sysData_lineEdit;
+    QHBoxLayout *horizontalLayout_11;
+    QPushButton *readSys_pushButton;
+    QPushButton *writeSys_pushButton;
+    QGroupBox *groupBox_8;
+    QGridLayout *gridLayout_11;
+    QVBoxLayout *verticalLayout_2;
+    QPushButton *loadSetting_pushButton;
+    QPushButton *saveSetting_pushButton;
     QWidget *page_2;
     QGroupBox *groupBox_4;
     QGridLayout *gridLayout_22;
@@ -353,14 +381,153 @@ public:
         config_toolBox->setMinimumSize(QSize(300, 0));
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
-        page->setGeometry(QRect(0, 0, 300, 433));
+        page->setGeometry(QRect(0, 0, 300, 415));
         play_pushButton = new QPushButton(page);
         play_pushButton->setObjectName(QStringLiteral("play_pushButton"));
-        play_pushButton->setGeometry(QRect(70, 120, 80, 20));
+        play_pushButton->setGeometry(QRect(120, 380, 80, 20));
+        groupBox_6 = new QGroupBox(page);
+        groupBox_6->setObjectName(QStringLiteral("groupBox_6"));
+        groupBox_6->setGeometry(QRect(40, 20, 218, 124));
+        groupBox_6->setMaximumSize(QSize(16777215, 1677));
+        groupBox_6->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";"));
+        gridLayout_8 = new QGridLayout(groupBox_6);
+        gridLayout_8->setSpacing(6);
+        gridLayout_8->setContentsMargins(11, 11, 11, 11);
+        gridLayout_8->setObjectName(QStringLiteral("gridLayout_8"));
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        label_2 = new QLabel(groupBox_6);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        horizontalLayout_4->addWidget(label_2);
+
+        VID_lineEdit = new QLineEdit(groupBox_6);
+        VID_lineEdit->setObjectName(QStringLiteral("VID_lineEdit"));
+
+        horizontalLayout_4->addWidget(VID_lineEdit);
+
+
+        gridLayout_8->addLayout(horizontalLayout_4, 0, 0, 1, 1);
+
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setSpacing(6);
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        label_3 = new QLabel(groupBox_6);
+        label_3->setObjectName(QStringLiteral("label_3"));
+
+        horizontalLayout_5->addWidget(label_3);
+
+        PID_lineEdit = new QLineEdit(groupBox_6);
+        PID_lineEdit->setObjectName(QStringLiteral("PID_lineEdit"));
+
+        horizontalLayout_5->addWidget(PID_lineEdit);
+
+
+        gridLayout_8->addLayout(horizontalLayout_5, 1, 0, 1, 1);
+
+        horizontalLayout_7 = new QHBoxLayout();
+        horizontalLayout_7->setSpacing(6);
+        horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
+        horizontalSpacer_7 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_7->addItem(horizontalSpacer_7);
+
+        linkUSB_pushButton = new QPushButton(groupBox_6);
+        linkUSB_pushButton->setObjectName(QStringLiteral("linkUSB_pushButton"));
+        linkUSB_pushButton->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";"));
+
+        horizontalLayout_7->addWidget(linkUSB_pushButton);
+
+
+        gridLayout_8->addLayout(horizontalLayout_7, 2, 0, 1, 1);
+
+        groupBox_7 = new QGroupBox(page);
+        groupBox_7->setObjectName(QStringLiteral("groupBox_7"));
+        groupBox_7->setGeometry(QRect(40, 150, 218, 124));
+        groupBox_7->setMaximumSize(QSize(16777215, 1677512));
+        groupBox_7->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";\n"
+""));
+        gridLayout_9 = new QGridLayout(groupBox_7);
+        gridLayout_9->setSpacing(6);
+        gridLayout_9->setContentsMargins(11, 11, 11, 11);
+        gridLayout_9->setObjectName(QStringLiteral("gridLayout_9"));
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setSpacing(6);
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        label_4 = new QLabel(groupBox_7);
+        label_4->setObjectName(QStringLiteral("label_4"));
+
+        horizontalLayout_6->addWidget(label_4);
+
+        sysAddress_lineEdit = new QLineEdit(groupBox_7);
+        sysAddress_lineEdit->setObjectName(QStringLiteral("sysAddress_lineEdit"));
+
+        horizontalLayout_6->addWidget(sysAddress_lineEdit);
+
+
+        gridLayout_9->addLayout(horizontalLayout_6, 0, 0, 1, 1);
+
+        horizontalLayout_8 = new QHBoxLayout();
+        horizontalLayout_8->setSpacing(6);
+        horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
+        label_5 = new QLabel(groupBox_7);
+        label_5->setObjectName(QStringLiteral("label_5"));
+
+        horizontalLayout_8->addWidget(label_5);
+
+        sysData_lineEdit = new QLineEdit(groupBox_7);
+        sysData_lineEdit->setObjectName(QStringLiteral("sysData_lineEdit"));
+
+        horizontalLayout_8->addWidget(sysData_lineEdit);
+
+
+        gridLayout_9->addLayout(horizontalLayout_8, 1, 0, 1, 1);
+
+        horizontalLayout_11 = new QHBoxLayout();
+        horizontalLayout_11->setSpacing(6);
+        horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
+        readSys_pushButton = new QPushButton(groupBox_7);
+        readSys_pushButton->setObjectName(QStringLiteral("readSys_pushButton"));
+
+        horizontalLayout_11->addWidget(readSys_pushButton);
+
+        writeSys_pushButton = new QPushButton(groupBox_7);
+        writeSys_pushButton->setObjectName(QStringLiteral("writeSys_pushButton"));
+
+        horizontalLayout_11->addWidget(writeSys_pushButton);
+
+
+        gridLayout_9->addLayout(horizontalLayout_11, 2, 0, 1, 1);
+
+        groupBox_8 = new QGroupBox(page);
+        groupBox_8->setObjectName(QStringLiteral("groupBox_8"));
+        groupBox_8->setGeometry(QRect(40, 280, 218, 89));
+        groupBox_8->setMaximumSize(QSize(16777215, 1677512));
+        gridLayout_11 = new QGridLayout(groupBox_8);
+        gridLayout_11->setSpacing(6);
+        gridLayout_11->setContentsMargins(11, 11, 11, 11);
+        gridLayout_11->setObjectName(QStringLiteral("gridLayout_11"));
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        loadSetting_pushButton = new QPushButton(groupBox_8);
+        loadSetting_pushButton->setObjectName(QStringLiteral("loadSetting_pushButton"));
+
+        verticalLayout_2->addWidget(loadSetting_pushButton);
+
+        saveSetting_pushButton = new QPushButton(groupBox_8);
+        saveSetting_pushButton->setObjectName(QStringLiteral("saveSetting_pushButton"));
+
+        verticalLayout_2->addWidget(saveSetting_pushButton);
+
+
+        gridLayout_11->addLayout(verticalLayout_2, 0, 0, 1, 1);
+
         config_toolBox->addItem(page, QString::fromUtf8("\345\237\272\346\234\254\350\256\276\347\275\256"));
         page_2 = new QWidget();
         page_2->setObjectName(QStringLiteral("page_2"));
-        page_2->setGeometry(QRect(0, 0, 300, 433));
+        page_2->setGeometry(QRect(0, 0, 300, 415));
         groupBox_4 = new QGroupBox(page_2);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
         groupBox_4->setGeometry(QRect(40, 20, 220, 141));
@@ -507,7 +674,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        config_toolBox->setCurrentIndex(1);
+        config_toolBox->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -538,6 +705,21 @@ public:
         peak_label->setText(QString());
         peak_Histogram_pushButton->setText(QApplication::translate("MainWindow", "\347\233\264\346\226\271\345\233\276", Q_NULLPTR));
         play_pushButton->setText(QApplication::translate("MainWindow", "play", Q_NULLPTR));
+        groupBox_6->setTitle(QApplication::translate("MainWindow", "\350\256\276\345\244\207\351\223\276\346\216\245\357\274\232", Q_NULLPTR));
+        label_2->setText(QApplication::translate("MainWindow", "VID:", Q_NULLPTR));
+        VID_lineEdit->setText(QApplication::translate("MainWindow", "8888", Q_NULLPTR));
+        label_3->setText(QApplication::translate("MainWindow", "PID ", Q_NULLPTR));
+        PID_lineEdit->setText(QApplication::translate("MainWindow", "0160", Q_NULLPTR));
+        linkUSB_pushButton->setText(QApplication::translate("MainWindow", "\350\277\236\346\216\245\350\256\276\345\244\207", Q_NULLPTR));
+        groupBox_7->setTitle(QApplication::translate("MainWindow", "\347\263\273\347\273\237\345\257\204\345\255\230\345\231\250\357\274\232", Q_NULLPTR));
+        label_4->setText(QApplication::translate("MainWindow", "\345\234\260\345\235\200\357\274\232", Q_NULLPTR));
+        sysAddress_lineEdit->setText(QApplication::translate("MainWindow", "13", Q_NULLPTR));
+        label_5->setText(QApplication::translate("MainWindow", "\346\225\260\346\215\256\357\274\232", Q_NULLPTR));
+        readSys_pushButton->setText(QApplication::translate("MainWindow", "\350\257\273\345\217\226", Q_NULLPTR));
+        writeSys_pushButton->setText(QApplication::translate("MainWindow", "\345\206\231\345\205\245", Q_NULLPTR));
+        groupBox_8->setTitle(QApplication::translate("MainWindow", "\351\205\215\347\275\256\351\233\206\357\274\232", Q_NULLPTR));
+        loadSetting_pushButton->setText(QApplication::translate("MainWindow", "\345\212\240\350\275\275\351\205\215\347\275\256\351\233\206", Q_NULLPTR));
+        saveSetting_pushButton->setText(QApplication::translate("MainWindow", "\344\277\235\345\255\230\351\205\215\347\275\256\351\233\206", Q_NULLPTR));
         config_toolBox->setItemText(config_toolBox->indexOf(page), QApplication::translate("MainWindow", "\345\237\272\346\234\254\350\256\276\347\275\256", Q_NULLPTR));
         groupBox_4->setTitle(QApplication::translate("MainWindow", "3D\351\274\240\346\240\207\350\256\276\347\275\256\357\274\232", Q_NULLPTR));
         label_7->setText(QApplication::translate("MainWindow", "\346\227\213\350\275\254\350\247\222\345\272\246\357\274\232", Q_NULLPTR));

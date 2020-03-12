@@ -59,4 +59,5 @@ void fileSave_Dialog::on_start_saveFile_pushButton_clicked()
 void fileSave_Dialog::on_cancel_save_pushButton_clicked()
 {
     emit isSaveFlagSignal(false,file_path,0);
+    this->hide();
 }

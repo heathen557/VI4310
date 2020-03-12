@@ -9,6 +9,7 @@
 #include"filesave_dialog.h"
 #include"savepcdthread.h"
 #include"calmeanstdthread.h"
+#include"receusb_msg.h"
 
 
 
@@ -73,31 +74,56 @@ private slots:
 
 
 
+  /////////////////  /**  USB 设备读写相关** * /////////////////////
+    void on_linkUSB_pushButton_clicked();
+
+    void on_readSys_pushButton_clicked();
+
+    void reReadSysSlot(QString str);    //读取sys的返回结果
+
+    void on_writeSys_pushButton_clicked();
+
+    void on_loadSetting_pushButton_clicked();
+
+    void on_saveSetting_pushButton_clicked();
+
+    void USB_linkInfoSlot(int );
 
 signals:
     void change_gain_signal(float);
     void change_tof_peak_signal();
     void isFilter_signal(bool);
 
+
+    /***********USB 设备读写相关************/
+    void openLink_signal(int,int);
+    void closeLinkSignal();
+    void readSysSignal(int,bool);
+    void writeSysSignal(int,QString,bool);
+    void loadSettingSignal(QString,bool);   //加载配置集
+    void start_read_usb_signal();
+
 private:
-    QThread *dealMsg_thread;      //数据处理线程
+    QThread *dealMsg_thread;           //数据处理线程
     DealUsb_msg *dealMsg_obj;
 
-    QThread *savePcd_thread;      //文件保存线程
+    QThread *savePcd_thread;           //文件保存线程
     savePCDThread* savePcd_obj;
 
-    calMeanStdThread *calMeanStd_obj; //
     QThread *calThread;
+    calMeanStdThread *calMeanStd_obj; //计算均值、方差线程相关
 
-    QString localFileDirPath;    //本地播放文件
+    QThread *recvUsb_thread;
+    ReceUSB_Msg *recvUsbMsg_obj;      //接收USB 数据相关线程
 
+    QString localFileDirPath;           //本地播放文件
     statisticsDialog  statisticsDia_; //统计信息界面
-
     fileSave_Dialog fileSave_dia;     //文件保存界面
+    QTimer show_image_timer;         //2D图像显示的定时器
 
-    QTimer show_image_timer;
 
-
+    /**********USB 连接信息相关****************/
+    bool isLinkSuccess;
 
 
     Ui::MainWindow *ui;
