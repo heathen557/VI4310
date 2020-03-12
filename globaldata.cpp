@@ -21,8 +21,8 @@ bool isShowPointCloud;  //是否有点云数据 ，有的话显示否则不显�
 
 //鼠标点击显示时相关
 QMutex mouseShowMutex;
-float mouseShowTOF[256][64];
-int mouseShowPEAK[256][64];
+float mouseShowTOF[160][120];
+int mouseShowPEAK[160][120];
 
 
 //数据接收相关

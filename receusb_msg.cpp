@@ -508,9 +508,9 @@ void ReceUSB_Msg::readDevSlot(int id,int address,bool recvFlag)
 
     isRecvFlag = recvFlag;
     read_usb();
-
-
 }
+
+
 
 //写入设备寄存器槽函数
 //!

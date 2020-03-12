@@ -43,7 +43,7 @@ void calMeanStdThread::updateSlot()
 
 
 
-    for(int i =0; i<16384; i++)
+    for(int i =0; i<19200; i++)
     {
         frameSize = useStatisticTofPoints[i].size();
 

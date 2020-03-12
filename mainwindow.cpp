@@ -16,8 +16,8 @@ extern bool isShowPointCloud;  //是否有点云数据 ，有的话显示否则�
 
 //鼠标点击显示时相关
 extern QMutex mouseShowMutex;
-extern float mouseShowTOF[256][64];
-extern int mouseShowPEAK[256][64];
+extern float mouseShowTOF[160][120];
+extern int mouseShowPEAK[160][120];
 
 /*保存用到的标识*/
 extern bool isSaveFlag;        //是否进行存储

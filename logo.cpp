@@ -30,7 +30,9 @@ Logo::Logo(QObject *parent):
     m_count = 0;
     isShowPointCloud = false;
 
-    const int NumSectors = 16416;      //16380 + 31   30个点被用来显示y轴距离的辅助线
+//    const int NumSectors = 16416;      //16380 + 31   30个点被用来显示y轴距离的辅助线
+
+       const int NumSectors = 30000;
 
     isFilter = false;
 
@@ -161,7 +163,7 @@ void Logo::readPCDFile1()
 */
 
 
-    m_data.resize(98500);
+    m_data.resize(115200);
     int m = 0;
 
 
@@ -186,42 +188,42 @@ void Logo::readPCDFile1()
         m += 6;
     }
 
-    for(;m<98304;m++)             //这样做 滤波以后清空上一帧存储的点云
+    for(;m<115200;m++)             //这样做 滤波以后清空上一帧存储的点云
     {
         m_data[m] = 0;
     }
+    m_data.resize(115200);
 
+//    m = 98304;
+//    int index_y = 0;
+//    for(int n=16384; n<115200; n+=2)         //这个是存储分割的点
+//    {
+////        qDebug()<<" index_y = "<<index_y<<endl;
 
-    m = 98304;
-    int index_y = 0;
-    for(int n=16384; n<16415; n+=2)         //这个是存储分割的点
-    {
-//        qDebug()<<" index_y = "<<index_y<<endl;
+//        m_data[0+m] = 7.0;
+//        m_data[1+m] = index_y;
+//        m_data[2+m] = 0;
+//        m_data[3+m] = 1.0;
+//        m_data[4+m] = 1.0;
+//        m_data[5+m] = 1.0;
 
-        m_data[0+m] = 7.0;
-        m_data[1+m] = index_y;
-        m_data[2+m] = 0;
-        m_data[3+m] = 1.0;
-        m_data[4+m] = 1.0;
-        m_data[5+m] = 1.0;
+//        m_data[6+m] = 9.0;
+//        m_data[7+m] = index_y;
+//        m_data[8+m] = 0;
+//        m_data[9+m] = 1.0;
+//        m_data[10+m] = 1.0;
+//        m_data[11+m] = 1.0;
+//        index_y++;
+//        m +=12;
 
-        m_data[6+m] = 9.0;
-        m_data[7+m] = index_y;
-        m_data[8+m] = 0;
-        m_data[9+m] = 1.0;
-        m_data[10+m] = 1.0;
-        m_data[11+m] = 1.0;
-        index_y++;
-        m +=12;
+//    }
 
-    }
+//    for(;m<115200;m++)
+//    {
+//        m_data[m] = 0;
+//    }
 
-    for(;m<98490;m++)
-    {
-        m_data[m] = 0;
-    }
-
-    m_data.resize(98490);
+//    m_data.resize(115200);
 //    qDebug()<<"m_data.size"<<m_data.size()<<"   m="<<m<<endl;
 
 }

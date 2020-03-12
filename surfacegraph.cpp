@@ -36,8 +36,8 @@
 
 using namespace QtDataVisualization;
 
-const int sampleCountX = 256;
-const int sampleCountZ = 64;
+const int sampleCountX = 160;
+const int sampleCountZ = 120;
 const int heightMapGridStepX = 6;
 const int heightMapGridStepZ = 6;
 const float sampleMin = -80.0f;
@@ -135,7 +135,7 @@ void SurfaceGraph::fillSqrtSinProxy_2(QStringList dataList)
 {
 //    qDebug()<<"the fillSqrtSinProxy_2 has com ,dataList ="<<dataList.length()<<endl;
     int len = dataList.length();
-    if(len<16384)
+    if(len<19200)
         return;
     //修复原来存在内存泄漏的问题
     dataArray->clear();
@@ -144,7 +144,7 @@ void SurfaceGraph::fillSqrtSinProxy_2(QStringList dataList)
 
         int index = 0;
         for (int j = 0; j < sampleCountX; j++) {
-            newRow[i][index++].setPosition(QVector3D(j,dataList[j+i*256].toFloat(),i));
+            newRow[i][index++].setPosition(QVector3D(j,dataList[j+i*160].toFloat(),i));
         }
         dataArray->push_back(&newRow[i]);
     }
@@ -172,9 +172,9 @@ void SurfaceGraph::enableSqrtSinModel(bool enable)
 
         m_graph->axisY()->setTitle(QStringLiteral("均值"));
 
-        m_graph->axisX()->setRange(0, 256);
+        m_graph->axisX()->setRange(0, sampleCountX);
         m_graph->axisY()->setRange(0.0f, 200.0f);
-        m_graph->axisZ()->setRange(0, 64);
+        m_graph->axisZ()->setRange(0, sampleCountZ);
 
 
         m_graph->axisX()->setLabelAutoRotation(30);

@@ -37,7 +37,7 @@ public:
     int r,g,b,rgb;
 
     QString tofPeakToSave_string;   //存储文件所需的tof和peak;
-    QString tofPeakNum[16384];     //两者配合使用
+    QString tofPeakNum[19200];     //两者配合使用
 
 
     /*******统计 均值、方差相关的变量******************/
@@ -59,15 +59,15 @@ public:
 
     /******角度矫正相关的变量******/
     float Lr;    //矩阵计算的中间变量
-    float tofOffsetArray[16384];    //四个角度矫正矩阵
-    float thetaArray[16384];
-    float betaArray[16384];
+    float tofOffsetArray[19200];    //四个角度矫正矩阵
+    float thetaArray[19200];
+    float betaArray[19200];
 
 
 
     /******** 利用peak值进行滤波的相关变量****************/
     int peakOffset;                     //设置为阈值，小于这个值的认为是无效数据，将tof值设置为0,程序设置的此值的默认值为0
-    float lastTOF[100][16384];         //存储上一帧的TOF值，然后此值和当前值做平均得出 现在的TOF值   ，取平均值的时候用  ,暂时取五帧
+    float lastTOF[100][19200];         //存储上一帧的TOF值，然后此值和当前值做平均得出 现在的TOF值   ，取平均值的时候用  ,暂时取五帧
     int haveIndex;
     bool isMeanFlag;
     bool isOnlyCenterShow_flag;         //是否只显示中心区域的标识，设置为true则只显示中心光较强的区域（超过范围的点xyz坐标全部设置为0），设置为false则显示全部点云数据；默认false

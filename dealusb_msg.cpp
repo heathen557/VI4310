@@ -10,8 +10,8 @@ extern bool isShowPointCloud;  //是否有点云数据 ，有的话显示否则�
 
 //鼠标点击显示时相关
 extern QMutex mouseShowMutex;
-extern float mouseShowTOF[256][64];
-extern int mouseShowPEAK[256][64];
+extern float mouseShowTOF[160][120];
+extern int mouseShowPEAK[160][120];
 
 /*保存用到的标识*/
 extern bool isSaveFlag;        //是否进行存储
@@ -28,14 +28,14 @@ extern vector<vector<int>> allStatisticPeakPoints;   //用于统计 均值和方
 
 
 DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent),
-    microQimage(256,64, QImage::Format_RGB32),macroQimage(256,64, QImage::Format_RGB32)
+    microQimage(160,120, QImage::Format_RGB32),macroQimage(160,120, QImage::Format_RGB32)
 {
 
     //    pointCloudRgb.width = 16384;
     //    pointCloudRgb.height = 1;
     //    pointCloudRgb.resize(pointCloudRgb.width);
 
-    tempRgbCloud.width = 16384;
+    tempRgbCloud.width = 19200;
     tempRgbCloud.height = 1 ;
     tempRgbCloud.points.resize(tempRgbCloud.width);
 
@@ -47,10 +47,8 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent),
     gainImage = 1;
 
     haveIndex = 0;
-
     peakOffset = 0;   //设置为阈值，小于这个值的认为是无效数据，将接收到的tof值设置为0  ::此功能预留，面阵_1028效果较好，但是对其他数据会滤掉大部分有效数据
     isOnlyCenterShow_flag = false;   //是否只显示中心区域的标识，设置为true则只显示中心光较强的区域（超过范围的点xyz坐标全部设置为0），设置为false则显示全部点云数据；默认false;
-
     averageNum = 1;            //滑动平均的帧数 , 默认为1
 
 
@@ -58,7 +56,7 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent),
     statisticStartFlag = true;
     statisticFrameNumber = 10;
     vector<int> singlePoint;
-    for(int i=0; i<16384; i++)
+    for(int i=0; i<19200; i++)
     {
         tempStatisticTofPoints.push_back(singlePoint);
         tempStatisticPeakPoints.push_back(singlePoint);
@@ -211,30 +209,57 @@ void DealUsb_msg::isFilter_slot(bool isFiter)
 
 }
 
-//260个字节的 解析协议的槽函数
+// 160x120版本的协议     一个包324个字节 2个字节的spadNum, 2个字节的lineNum
+// 从中间往上下两侧扩散
+// 中间行为 59   0-59为上半部分   60-129为下半部分
+//!
+//! \brief DealUsb_msg::recvMsgSlot
+//! \param array
+//!     spadNum = 0,1,2,...119         一个spadNum 有160个点 一行数据的量 所以总共有120个点
+//!  1、首先根据lineNum(0,1)来判断是属于上半部分，还是属于下半部分
+//!  2、lineIndex = spadNum/4 = 0,1,2,...29      宏像素的第几个 因为是4个spadNum为一组
+//!  3、InnerLineNum =  (spadNum%4)/2 = 0,1      spadNum%4 = 0 ,1,2,3       //宏像素的第一行还是第二行
+//!  4、在160*120的图像中的行号为： rowImage = lineIndex*2 + InnerLineNum   (0-59)
+//!                                上半区：59 - rowImage
+//!                                下半区：60 + rowImage
+//!
+//!
+//!  5、colImage = i*2 + spadNum%2
 void DealUsb_msg::recvMsgSlot(QByteArray array)
 {
     int ret;
     char *MyBuffer;
 
-
     MyBuffer = array.data();
-    int imgRow,imgCol;
-    int spadNum = (quint8)(MyBuffer[0]) +  (((quint8)(MyBuffer[1]))<<8);
-    int line_number = (quint8)(MyBuffer[2]) +  (((quint8)(MyBuffer[3]))<<8);
-//     qDebug()<<"spadNum = "<<spadNum<<"  line_number = "<<line_number<<endl;     //打包发布会导致打包发布后的程序卡顿
 
-    if(line_number!=0  && ( (lastLineNum+1) != line_number) )
+
+    int rowImg,colImg;
+    int spadNum = (quint8)(MyBuffer[0]) +  (((quint8)(MyBuffer[1]))<<8);            // 0,1,2,3....119
+    int line_number = (quint8)(MyBuffer[2]) +  (((quint8)(MyBuffer[3]))<<8);        // 0 或者 1
+
+
+    if(line_number > 1 )
     {
-        qDebug()<<"lastLineNum="<<lastLineNum <<"   "<<line_number<<endl;
+        qDebug()<<"line_number error,  LineNum="<<line_number;
     }
-    lastLineNum = line_number;
 
-
-    if(spadNum==0 && lastSpadNum==7)  //此时说明上一帧数据已经接收完毕，把整帧数据付给其他线程，供其显示，数据可以显示了
+    if(spadNum < lastSpadNum)  //此时说明上一帧数据已经接收完毕，把整帧数据付给其他线程，供其显示，数据可以显示了
     {
 
-        haveIndex++;    //满足 足够一帧的数据了
+        //判断是否保存数据
+        if(isSaveFlag)
+        {
+
+            bool flag = true;
+            for(int i=0; i<19200; i++)
+            {
+                tofPeakToSave_string.append(tofPeakNum[i]);
+                //                    tofPeakNum[i].clear();    //这句代码屏蔽以后 ，当有遗漏数据的时候，会使用上一帧的数据进行存储
+            }
+            emit saveTXTSignal(tofPeakToSave_string);
+            tofPeakToSave_string.clear();
+
+        }
 
 
         //统计信息相关的 ，将统计信息的容器赋值给全局变量
@@ -267,43 +292,18 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
         // 2、将滤波后的三维点云 同步到二维图像
         if(true == isFilterFlag)
         {
-            /*******************开启滤波功能*********************************/
-            //先用直通滤波把所有零点重复的零点过滤掉
-           /* pcl::PassThrough<pcl::PointXYZRGB> pass;                      //创建滤波器对象
-            pass.setInputCloud(tempRgbCloud.makeShared());                //设置待滤波的点云
-            pass.setFilterFieldName("y");                                 //设置在Z轴方向上进行滤波
-            pass.setFilterLimits(0, 0.10);                                //设置滤波范围(从最高点向下0.10米去除)
-            pass.setFilterLimitsNegative(true);                           //保留
-            pass.filter(tempRgbCloud_pass);                                   //滤波并存储
-            if(tempRgbCloud_pass.size()<1)
-                return;
-
-            //统计
-            tempRgbCloud_radius.clear();
-            pcl::StatisticalOutlierRemoval<pcl::PointXYZRGB> outrem(true);
-            outrem.setInputCloud(tempRgbCloud_pass.makeShared());
-            outrem.setMeanK(40);
-            outrem.setStddevMulThresh(0.25);
-            //40  0.1 不见前面噪点
-            outrem.filter(tempRgbCloud_radius);
-            int len = outrem.getRemovedIndices()->size();*/
-            QTime t1,t2;
-            pcl::VoxelGrid<pcl::PointXYZRGB> sor;//滤波处理对象
-            sor.setInputCloud(tempRgbCloud.makeShared());
-            sor.setLeafSize(0.03f, 0.03f, 0.03f);//设置滤波器处理时采用的体素大小的参数
-            sor.filter(tempRgbCloud_pass);
-
             tempRgbCloud_radius.resize(0);
-//            t1 = QTime::currentTime();
-            pcl::RadiusOutlierRemoval<pcl::PointXYZRGB> outrem;      //设置为true以后才能获取到滤出的噪点的 个数以及点的序列号
-            outrem.setInputCloud(tempRgbCloud_pass.makeShared());              //设置输入点云
-            outrem.setRadiusSearch(0.2);              //设置在0.8半径的范围内找邻近点
-            outrem.setMinNeighborsInRadius(50);       //设置查询点的邻近点集数小于2的删除  30
+            pcl::RadiusOutlierRemoval<pcl::PointXYZRGB> outrem(true);      //设置为true以后才能获取到滤出的噪点的 个数以及点的序列号
+            outrem.setInputCloud(tempRgbCloud.makeShared());              //设置输入点云
+            outrem.setRadiusSearch(0.25);              //设置在0.8半径的范围内找邻近点
+            outrem.setMinNeighborsInRadius(15);       //设置查询点的邻近点集数小于2的删除  30
             outrem.filter (tempRgbCloud_radius);//执行条件滤波，存储结果到cloud_filtered
-//            t2 = QTime::currentTime();
-//            qDebug()<<"RadiusOutlierRemoval costs time = "<<  t1.msecsTo(t2) <<"ms"<<endl;
+            int len = outrem.getRemovedIndices()->size();
 
 
+            //条件滤波   设置半径 以及 圆周内的点数
+            //            qDebug()<<"dealusb_msg    fileted size = "<<outrem.getRemovedIndices()->size();
+            //            qDebug()<<" passThrough cost time = "<<time.elapsed()<<endl;
             /*************************以上为滤波处理部分************************************************************/
             mutex_3D.lock();
             tofImage = microQimage;
@@ -312,68 +312,38 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             mutex_3D.unlock();
             /***************************************************************/
 
-        }else
-        {                      //不进行滤波
+        }else{                      //不进行滤波
             mutex_3D.lock();
             tofImage = microQimage;
             intensityImage = macroQimage;
             pcl::copyPointCloud(tempRgbCloud,pointCloudRgb);
             mutex_3D.unlock();
         }
-
-
-        //判断是否保存数据部分
-        if(isSaveFlag)
-        {
-
-            bool flag = true;
-            for(int i=0; i<16384; i++)
-            {
-                if(tofPeakNum[i].isEmpty())
-                {
-                    flag =false;
-                    tofPeakNum[i] = QString("%1").arg(0, 5, 10, QChar('0')).append(",").append(QString("%1").arg(0, 5, 10, QChar('0'))).append("\n");    //把没有接收到的数据设置为0 并且保存  2019-10-16 华为需求更改
-                }
-                tofPeakToSave_string.append(tofPeakNum[i]);
-                // tofPeakNum[i].clear();   //因为存在丢数据的问题，所以这里不置为0，当前帧丢失某个数据时，则保留上一帧的数据
-            }
-            emit saveTXTSignal(tofPeakToSave_string);
-            tofPeakToSave_string.clear();
-
-        }
-
-
-
-
-
         isShowPointCloud = true;
 
         //        tempRgbCloud.clear();
-    }  //以上为处理完整的一帧数据*********************************************************
+    }//以上为处理完整的一帧数据
 
 
-
-    int line_offset,row_offset;
-    if(lineSelect)
+    int lineIndex = spadNum/4 ;        //0,1,2,...29   宏像素的第几个 因为是4个spadNum为一组   四个像素点构成一个宏像素
+    int InnerLineNum = (spadNum%4)/2;  //属于宏像素的第一行还是第二行； spadNum%4 = 0,1,2,3  0、1在第一行  2、3在第二行
+    int tmpRow = lineIndex*2 + InnerLineNum;   //0,1,2,...,59
+    if(0 == line_number)  //属于上半区
     {
-        line_offset = spadNum / 2;           //取值 0 1 2 3 ；
-        row_offset = (spadNum+1) % 2;      //表示是在第一行 还是在第二行
-    }else
-    {                                             //这种方式应该是对的
-        line_offset = spadNum / 2;           //取值 0 1 2 3 ；
-        row_offset = (spadNum) % 2;      //表示是在第一行 还是在第二行
+        rowImg = 59 - tmpRow;          //0,...59
+    }else                  //属于下半区
+    {
+        rowImg = 60 + tmpRow;       //660,..., 119
     }
 
 
+//    qDebug()<<"rowImg = "<<rowImg<<endl;
 
-    for(int i=0; i<64; i++)
+
+    for(int i=0; i<80; i++)    //每个包有80个点
     {
 
-        imgRow = i * 4 + line_offset;
-        imgCol = line_number * 2 + row_offset;
-        cloudIndex = imgCol*256+imgRow;      //在点云数据中的标号
-        int tof,intensity ,tmpTof;     //tof：是用来做显示（二维、三维、最大最小值）（因为涉及到要进行校正）    tmpTof：用来存储本地数据 以及统计界面时候用
-
+        int tof,intensity;
         if(isTOF == false)   //设置一个不可能的值
         {
             tof = quint8(MyBuffer[4 + i * 4]) + ((quint8(MyBuffer[4 + i * 4 +1]))<<8);
@@ -385,50 +355,16 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
         }
 
 
+//        qDebug()<<"tof = "<<tof<<"   peak = "<<intensity;
+        colImg = i*2 + spadNum%2;                    //spad%2  0 2:第一列  1,3：第二列
+//        cloudIndex = imgCol*256+imgRow;
+        cloudIndex = rowImg*160 + colImg;           //在点云数据中的标号  0,..., 119*160+159
 
-        /*******************************************************************************/
-
-        //循环赋值  滑动平均滤波
-        for(int n=0; n<averageNum-1; n++)
-        {
-            lastTOF[n][cloudIndex] = lastTOF[n+1][cloudIndex];
-        }
-        lastTOF[averageNum-1][cloudIndex] = tof;
-
-        if(haveIndex >averageNum)
-        {
-            float zeroNum = 0;
-            haveIndex = averageNum+1;
-            float allTof_100 = 0;
-            for(int k=0; k<averageNum; k++)     //100帧取平均   ，如果有0的数据则不进行平均处理
-            {
-                if(lastTOF[k][cloudIndex] == 0)
-                {
-                    zeroNum = zeroNum+1;
-                }
-                allTof_100 += lastTOF[k][cloudIndex];
-            }
-            if(zeroNum != averageNum)
-
-           tof = allTof_100/(averageNum-zeroNum);
-//           qDebug()<<"  tof = "<<tof;
-        }
-        /************************************************************/
-
-
-        //这个是和90度直角矫正相关的  减去一个偏移量70  ；把处理之后小于0的值都过滤掉
-//      tof = tof -70;
-        tmpTof = tof;    //原始的tof值  ，没有做角度矫正相关的操作
-
-//      tof =tof +32;
-        tof = tof + tofOffsetArray[cloudIndex];
 
         //设置TOF图像、强度图像的颜色
         QRgb tofColor,intenColor;
         int gainIndex_tof = tof*gainImage;
-        gainIndex_tof = gainIndex_tof>0 ?gainIndex_tof:0;
         int gainIndex_intensity =intensity * gainImage;
-        gainIndex_intensity = gainIndex_intensity>0?gainIndex_intensity:0;
         if(gainIndex_tof<1024 && gainIndex_tof>=0)
             tofColor = qRgb(colormap[gainIndex_tof * 3], colormap[gainIndex_tof * 3 + 1], colormap[gainIndex_tof * 3 + 2]);
         else
@@ -439,64 +375,46 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
         else
             intenColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
 
-        //Tof 转换为2D图像 3D点云 部分
-        if(imgRow>=0 && imgRow<256 && imgCol>=0 && imgCol<64)
+
+        if(colImg>=0 && colImg<160 && rowImg>=0 && rowImg<120)
         {
-            microQimage.setPixel(imgRow,imgCol,tofColor);         //TOF图像的赋值
-            macroQimage.setPixel(imgRow,imgCol,intenColor);       //强度图像的赋值
+            microQimage.setPixel(colImg,rowImg,tofColor);         //TOF图像的赋值
+            macroQimage.setPixel(colImg,rowImg,intenColor);       //强度图像的赋值
 
             /************鼠标点击处显示信息相关*************/
             mouseShowMutex.lock();
-            mouseShowTOF[imgRow][imgCol] = tof;
-            mouseShowPEAK[imgRow][imgCol] = intensity;
+            mouseShowTOF[colImg][rowImg] = tof;
+            mouseShowPEAK[colImg][rowImg] = intensity;
             mouseShowMutex.unlock();
 
             /*********文件保存相关*****************/
             if(isSaveFlag == true)
             {
-                tofPeakNum[cloudIndex] = QString("%1").arg(tmpTof, 5, 10, QChar('0')).append(",").append(QString("%1").arg(intensity, 5, 10, QChar('0'))).append("\n");
-
+                tofPeakNum[cloudIndex] = QString::number(tof).append(", ").append(QString::number(intensity)).append("\n");
             }
+//            else
+//            {
+//                tofPeakNum[cloudIndex].clear();
+
+//            }
 
 
             /************点云数据相关************/
-            //这部分是tof到三维点云的转换
-            Lr =  (tof*tof - (5/1.55)*(5/1.55))/(2*(tof + (5/1.55)*sin(thetaArray[cloudIndex]))) ;      //
-            Lr = Lr<0?0:Lr;
-            temp_x = Lr *  sin(thetaArray[cloudIndex]) * LSB;                                          //  x坐标值
-            temp_z = Lr *  cos(thetaArray[cloudIndex]) * sin(betaArray[cloudIndex]) * LSB;            //  y坐标值
-            temp_y = Lr *  cos(thetaArray[cloudIndex]) * cos(betaArray[cloudIndex]) * LSB -0.2;      // z坐标值
+            //获取三维坐标
+//            temp_x = tof * x_Weight[cloudIndex] * LSB;     //矩阵有变化 暂时不用  2019-11-20
+//            temp_y = tof * y_Weight[cloudIndex] * LSB;
+//            temp_z = tof * z_Weight[cloudIndex] * LSB;
 
-            if(tofOffsetArray[cloudIndex] ==tof)     //tof 原始值为0 处的位置会 显示成为一个弧度,所以将这里的三维点云坐标置为0
-            {
-                temp_x = 0;
-                temp_z = 0;
-                temp_y = 0;
-            }
-            if(intensity <peakOffset)    //根据peak值进行滤波处理数据
-            {
-                temp_x = 0;
-                temp_z = 0;
-                temp_y = 0;
-            }
+            temp_x = tof * sin(thetaArray[cloudIndex]) *LSB;
+            temp_y = tof * cos(thetaArray[cloudIndex])*cos(betaArray[cloudIndex]) *LSB;
+            temp_z = tof * cos(thetaArray[cloudIndex])*sin(betaArray[cloudIndex]) *LSB;
 
-            mouseShowTOF[imgRow][imgCol] = temp_y;
-
-//          //这里是只显示中间光强度比较大的区域 显示行数：12-52   显示列数：78-178
-            if(isOnlyCenterShow_flag)
-            {
-                if(imgCol<12 || imgCol>52 || imgRow<78 || imgRow>178)
-                {
-                    temp_x = 0;
-                    temp_y = 0;
-                    temp_z = 0;
-                }
-            }
             QColor mColor = QColor(tofColor);
             r = mColor.red();
             g = mColor.green();
             b = mColor.blue();
             rgb = ((int)r << 16 | (int)g << 8 | (int)b);
+
 
             tempRgbCloud.points[cloudIndex].x = temp_x;
             tempRgbCloud.points[cloudIndex].y = temp_y;
@@ -514,7 +432,7 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
                     tempStatisticPeakPoints[cloudIndex].erase(tempStatisticPeakPoints[cloudIndex].begin(),tempStatisticPeakPoints[cloudIndex].begin() + offset + 1);
                 }
                 //向每个点的容器中添加一个新的点,完成循环存储
-                tempStatisticTofPoints[cloudIndex].push_back(tmpTof);
+                tempStatisticTofPoints[cloudIndex].push_back(tof);
                 tempStatisticPeakPoints[cloudIndex].push_back(intensity);
             }
 
@@ -527,17 +445,16 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             zMax = (temp_z>zMax) ? temp_z : zMax;
             zMin = (temp_z<zMin) ? temp_z : zMin;
 
-            //统计二维图像 tof/peak 的最大值 最小值
+            //统计二维图像
             tofMax = (tof>tofMax) ? tof : tofMax;
             tofMin = (tof<tofMin) ? tof : tofMin;
             peakMax = (intensity>peakMax) ? intensity : peakMax;
             peakMin = (intensity<peakMin) ? intensity : peakMin;
         }
         else
-            qDebug()<<QStringLiteral("给像素赋值时出现异常 imgrow=")<<imgRow<<"   imgCol = "<<imgCol<<endl;
+            qDebug()<<QStringLiteral("给像素赋值时出现异常 imgrow=")<<rowImg<<"   imgCol = "<<colImg<<endl;
 
     }
-
     lastSpadNum = spadNum ;
 }
 
@@ -562,14 +479,12 @@ void DealUsb_msg::playLocalFile_slot(QString sPath)
 
 void DealUsb_msg::readLocalPCDFile()
 {
-    //    int fileIndex = 1;
     QString fileName;
-    QString line[17000];
+    QString line[20000];
     QStringList tofPeakList;
     int imgRow,imgCol;
 
 
-    haveIndex++;
 
     fileName = filePath + QString::number(fileIndex)+".txt";
     fileIndex++;
@@ -588,14 +503,14 @@ void DealUsb_msg::readLocalPCDFile()
         file.close();
     }else
     {
-        qDebug()<<"read local file error!,filename = "<<fileName<<endl;
+        qDebug()<<"read file error!"<<endl;
         //            localFile_timer->stop();
         fileIndex = 1;
         return;
     }
-    for(int i=0; i<16384; i++)            //去掉空的数据
+    for(int i=0; i<countNum; i++)            //去掉空的数据
     {
-        int tof,intensity,tmpTof;   //tof:用来显示（二维、三维、鼠标点击、最大最小值）,因为涉及到要减去一个偏移；     tmpTof：用来存储原始数据、以及统计界面的显示
+        int tof,intensity;
         if(line[i].isEmpty())
             continue;
 
@@ -613,45 +528,14 @@ void DealUsb_msg::readLocalPCDFile()
            tof = tofPeakList[1].toInt();
         }
 
-        //循环赋值
-        for(int n=0; n<averageNum-1; n++)
-        {
-            lastTOF[n][i] = lastTOF[n+1][i];
-        }
-        lastTOF[averageNum-1][i] = tof;
 
-        if(haveIndex >averageNum)
-        {
-            float zeroNum = 0;
-            haveIndex = averageNum+1;
-            float allTof_100 = 0;
-            for(int k=0; k<averageNum; k++)     //100帧取平均   ，如果有0的数据则不进行平均处理
-            {
-                if(lastTOF[k][i] == 0)
-                {
-                    zeroNum = zeroNum+1;
-                }
-                allTof_100 += lastTOF[k][i];
-            }
-            if(zeroNum != averageNum)
-
-           tof = allTof_100/(averageNum-zeroNum);
-        }
-
-
-        tmpTof = tof;
-//        tof = tof - 70;
-
-        tof = tof + tofOffsetArray[i];
-//        qDebug()<<" tofOffsetArray[cloudIndex] "<<cloudIndex<<"      "<<tofOffsetArray[cloudIndex];
-//        tof = tof<0? 0:tof;
 
         //行列以及颜色传递给图像
-        imgRow = i%256;
-        imgCol = i/256;
+        imgRow = i%160;
+        imgCol = i/160;
         cloudIndex = i;      //在点云数据中的标号
 
-//            qDebug()<<"imgRow="<<imgRow<<"  imgCol="<<imgCol<<endl;
+        //            qDebug()<<"imgRow="<<imgRow<<"  imgCol="<<imgCol<<endl;
 
         //设置TOF图像、强度图像的颜色
         QRgb tofColor,intenColor;
@@ -672,7 +556,7 @@ void DealUsb_msg::readLocalPCDFile()
             intenColor = qRgb(colormap[1023 * 3], colormap[1023 * 3 + 1], colormap[1023 * 3 + 2]);
 
 
-        if(imgRow>=0 && imgRow<256 && imgCol>=0 && imgCol<64)
+        if(imgRow>=0 && imgRow<160 && imgCol>=0 && imgCol<120)
         {
             microQimage.setPixel(imgRow,imgCol,tofColor);         //TOF图像的赋值
             macroQimage.setPixel(imgRow,imgCol,intenColor);       //强度图像的赋值
@@ -691,25 +575,9 @@ void DealUsb_msg::readLocalPCDFile()
 //            temp_y = tof * y_Weight[cloudIndex] * LSB;
 //            temp_z = tof * z_Weight[cloudIndex] * LSB;
 
-
-            Lr =  (tof*tof - (5/1.55)*(5/1.55))/(2*(tof + (5/1.55)*sin(thetaArray[cloudIndex]))) ;      //
-            Lr = Lr<0?0:Lr;
-            temp_x = Lr * sin(thetaArray[cloudIndex]) * LSB ;                                   //  x坐标值
-            temp_z = Lr *  cos(thetaArray[cloudIndex]) * sin(betaArray[cloudIndex]) * LSB;     //  y坐标值
-            temp_y = Lr *  cos(thetaArray[cloudIndex]) * cos(betaArray[cloudIndex]) * LSB - 0.2;      // z坐标值
-
-
-            if(isOnlyCenterShow_flag)
-            {
-                if(imgCol<12 || imgCol>52 || imgRow<78 || imgRow>178)
-                {
-                    temp_x = 0;
-                    temp_y = 0;
-                    temp_z = 0;
-                }
-            }
-
-            mouseShowTOF[imgRow][imgCol] = temp_y;
+            temp_x = tof * sin(thetaArray[cloudIndex]) *LSB;
+            temp_y = tof * cos(thetaArray[cloudIndex])*cos(betaArray[cloudIndex]) *LSB;
+            temp_z = tof * cos(thetaArray[cloudIndex])*sin(betaArray[cloudIndex]) *LSB;
 
             QColor mColor = QColor(tofColor);
             r = mColor.red();
@@ -718,43 +586,12 @@ void DealUsb_msg::readLocalPCDFile()
             rgb = ((int)r << 16 | (int)g << 8 | (int)b);
 
 
-            if(intensity < peakOffset)
-            {
-                temp_x = 0;
-                temp_z = 0;
-                temp_y = 0;
-            }
-
-            if(tofOffsetArray[cloudIndex] == tof)
-            {
-                temp_x = 0;
-                temp_z = 0;
-                temp_y = 0;
-            }
-
             tempRgbCloud.points[cloudIndex].x = temp_x;
             tempRgbCloud.points[cloudIndex].y = temp_y;
             tempRgbCloud.points[cloudIndex].z = temp_z;
             tempRgbCloud.points[cloudIndex].rgb = *reinterpret_cast<float*>(&rgb);
 
 //            qDebug()<<" cloudIndex = "<<cloudIndex<<endl;
-
-
-
-
-            /*********文件保存相关*****************/
-            if(isSaveFlag == true)
-            {
-//                tofPeakNum[cloudIndex] = QString::number(tof).append(", ").append(QString::number(intensity)).append("\n");
-                tofPeakNum[cloudIndex] = QString("%1").arg(tmpTof, 5, 10, QChar('0')).append(",").append(QString("%1").arg(intensity, 5, 10, QChar('0'))).append("\n");
-            }else
-            {
-                tofPeakNum[cloudIndex].clear();
-
-            }
-
-
-
 
             /***************统计均值 、方差相关***********************/
             if(statisticStartFlag == true)
@@ -767,7 +604,7 @@ void DealUsb_msg::readLocalPCDFile()
                     tempStatisticPeakPoints[cloudIndex].erase(tempStatisticPeakPoints[cloudIndex].begin(),tempStatisticPeakPoints[cloudIndex].begin() + offset + 1);
                 }
                 //向每个点的容器中添加一个新的点,完成循环存储
-                tempStatisticTofPoints[cloudIndex].push_back(tmpTof);
+                tempStatisticTofPoints[cloudIndex].push_back(tof);
                 tempStatisticPeakPoints[cloudIndex].push_back(intensity);
             }
 
@@ -794,10 +631,6 @@ void DealUsb_msg::readLocalPCDFile()
 
 
 
-    /*********************test saveFile HUAWEI ***********************************************/
-    haveIndex++;
-
-    /**********************************************************************/
     //统计信息相关的 ，将统计信息的容器赋值给全局变量
     if(statisticStartFlag)
     {
@@ -826,91 +659,60 @@ void DealUsb_msg::readLocalPCDFile()
 
 
 
+
     // 1、将滤波功能放到这里进行实现，
     // 2、将滤波后的三维点云 同步到二维图像
     if(true == isFilterFlag)
     {
         /*******************开启滤波功能*********************************/
-//        //先用直通滤波把所有零点重复的零点过滤掉
-//        pcl::PassThrough<pcl::PointXYZRGB> pass;                      //创建滤波器对象
-//        pass.setInputCloud(tempRgbCloud.makeShared());                //设置待滤波的点云
-//        pass.setFilterFieldName("y");                                 //设置在Z轴方向上进行滤波
-//        pass.setFilterLimits(0, 0.10);                                //设置滤波范围(从最高点向下0.10米去除)
-//        pass.setFilterLimitsNegative(true);                           //保留
-//        pass.filter(tempRgbCloud_pass);                                   //滤波并存储
-//        if(tempRgbCloud_pass.size()<1)
-//                return;
+        //先用直通滤波把所有零点重复的零点过滤掉
+        //        pcl::PassThrough<pcl::PointXYZRGB> pass;                      //创建滤波器对象
+        //        pass.setInputCloud(tempRgbCloud.makeShared());                //设置待滤波的点云
+        //        pass.setFilterFieldName("y");                                 //设置在Z轴方向上进行滤波
+        //        pass.setFilterLimits(0, 0.10);                                //设置滤波范围(从最高点向下0.10米去除)
+        //        pass.setFilterLimitsNegative(true);                           //保留
+        //        pass.filter(tempRgbCloud_pass);                                   //滤波并存储
+        //        if(tempRgbCloud_pass.size()<1)
+        //                return;
 
-//        tempRgbCloud_radius.clear();
-//        pcl::StatisticalOutlierRemoval<pcl::PointXYZRGB> outrem(true);
-//        outrem.setInputCloud(tempRgbCloud_pass.makeShared());
-//        outrem.setMeanK(10);
-//        outrem.setStddevMulThresh(0.25);
-//        //40  0.1 不见前面噪点
-//        outrem.filter(tempRgbCloud_radius);
+        //  统计
+        tempRgbCloud_radius.clear();
+        pcl::StatisticalOutlierRemoval<pcl::PointXYZRGB> outrem(true);
+        outrem.setInputCloud(tempRgbCloud.makeShared());
+        outrem.setMeanK(40);
+        outrem.setStddevMulThresh(0.25);
+        //40  0.1 不见前面噪点
+        outrem.filter(tempRgbCloud_radius);
+        int len = outrem.getRemovedIndices()->size();
+        qDebug()<<"after filter the points'Number = "<<tempRgbCloud_radius.size()<<endl;
+
+
+//        tempRgbCloud_radius.resize(0);
+//        pcl::RadiusOutlierRemoval<pcl::PointXYZRGB> outrem(true);      //设置为true以后才能获取到滤出的噪点的 个数以及点的序列号
+//        outrem.setInputCloud(tempRgbCloud.makeShared());              //设置输入点云
+//        outrem.setRadiusSearch(0.25);              //设置在0.8半径的范围内找邻近点
+//        outrem.setMinNeighborsInRadius(15);       //设置查询点的邻近点集数小于2的删除  30
+//        outrem.filter (tempRgbCloud_radius);//执行条件滤波，存储结果到cloud_filtered
 //        int len = outrem.getRemovedIndices()->size();
-
-
-
-
-        QTime t1,t2;
-        pcl::VoxelGrid<pcl::PointXYZRGB> sor;//滤波处理对象
-        sor.setInputCloud(tempRgbCloud.makeShared());
-        sor.setLeafSize(0.03f, 0.03f, 0.03f);//设置滤波器处理时采用的体素大小的参数
-        sor.filter(tempRgbCloud_pass);
-        tempRgbCloud_radius.resize(0);
-//            t1 = QTime::currentTime();
-        pcl::RadiusOutlierRemoval<pcl::PointXYZRGB> outrem;      //设置为true以后才能获取到滤出的噪点的 个数以及点的序列号
-        outrem.setInputCloud(tempRgbCloud_pass.makeShared());              //设置输入点云
-        outrem.setRadiusSearch(0.2);              //设置在0.8半径的范围内找邻近点
-        outrem.setMinNeighborsInRadius(50);       //设置查询点的邻近点集数小于2的删除  30
-        outrem.filter (tempRgbCloud_radius);//执行条件滤波，存储结果到cloud_filtered
-
 
         /*************************以上为滤波处理部分************************************************************/
 
+        /***********************接下来 根据点云的序号 去除二维图像中的噪声************************/
 
         mutex_3D.lock();
         tofImage = microQimage;
         intensityImage = macroQimage;
-
         pcl::copyPointCloud(tempRgbCloud_radius,pointCloudRgb);
         mutex_3D.unlock();
-
-
         /***************************************************************/
 
-    }else
-    {                      //不进行滤波
+    }else{                      //不进行滤波
         mutex_3D.lock();
         tofImage = microQimage;
         intensityImage = macroQimage;
-
         pcl::copyPointCloud(tempRgbCloud,pointCloudRgb);
         mutex_3D.unlock();
     }
-
-    //判断是否保存数据
-    if(isSaveFlag)
-    {
-
-        bool flag = true;
-        for(int i=0; i<16384; i++)
-        {
-            if(tofPeakNum[i].isEmpty())
-            {
-                flag =false;
-                tofPeakNum[i] = QString("%1").arg(0, 5, 10, QChar('0')).append(",").append(QString("%1").arg(0, 5, 10, QChar('0'))).append("\n");   //把没有接收到的数据设置为0 并且保存  2019-10-16 华为需求更改
-            }
-            tofPeakToSave_string.append(tofPeakNum[i]);
-            tofPeakNum[i].clear();
-        }
-
-        emit saveTXTSignal(tofPeakToSave_string);
-        tofPeakToSave_string.clear();
-
-    }
-
     isShowPointCloud = true;
 }
 
