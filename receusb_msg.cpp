@@ -327,45 +327,10 @@ void ReceUSB_Msg::read_usb()
             break;
         }
 
-        if(260 == ret)
+        if(324 == ret)     //4 + 320个字节   包含80个点的数据
         {
-            mArray = QByteArray(MyBuffer,260);
+            mArray = QByteArray(MyBuffer,ret);
             emit recvMsgSignal(mArray);
-//            QDataStream out(&mArray,QIODevice::ReadWrite);
-//            QString strHex;
-//            while (!out.atEnd())
-//            {
-//                qint8 outChar=0;
-//                out>>outChar;
-//                QString str=QString("%1").arg(outChar&0xFF,2,16,QLatin1Char('0'));
-//                if (str.length()>1)
-//                {
-//                    strHex+=str+" ";
-//                }
-//                else
-//                {
-//                    strHex+="0"+str+" ";
-//                }
-//            }
-//            strHex = strHex.toUpper();
-//            qDebug()<<QStringLiteral("原始数据为：")<<strHex<<endl;
-        }else if(ret <260)
-        {
-            mArray = QByteArray(MyBuffer,ret);
-
-            mArray = QByteArray(MyBuffer,ret);
-            if(4 == ret)
-            {
-                tmpArray.clear();
-                tmpArray.append(mArray);
-            }
-            if(256 == ret && 4 == tmpArray.size())
-            {
-                tmpArray.append(mArray);
-                emit recvMsgSignal(tmpArray);
-                tmpArray.clear();
-            }
-
         }
 
     }//while

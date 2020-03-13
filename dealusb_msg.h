@@ -48,8 +48,6 @@ public:
     vector<vector<int>> tempStatisticPeakPoints;   //用于统计 均值和方差的 容器
 
 
-
-
     //读取本地文件相关的
     QString filePath;
     QTimer *localFile_timer;
@@ -74,6 +72,19 @@ public:
     int averageNum;                       //滑动平均的帧数 , 默认为1
     bool lineSelect;                   //两个微像素 是否切换  默认false;
 
+    /************pileuP 以及 自动校正的相关变量 ******************/
+    bool is_pileUp_flag;          //是否进行pile_up
+    int calibration_real_dis;     //用户设定的真实距离
+    bool isAutoCalibration_flag;
+    int ishave_Four ;             //判断是不是4个均值都计算完毕
+    int calibration_mean_num;     //校正时 取的平均的个数
+    vector<float> vec_tof_1;      //59*160+79
+    vector<float> vec_tof_2;      //59*160+80
+    vector<float> vec_tof_3;      //60*160+79
+    vector<float> vec_tof_4;      //60*160+80
+    float resTof_1,resTof_2,resTof_3,resTof_4;
+    float realTof_1,realTof_2,realTof_3,realTof_4;
+
 
 signals:
     void staticValueSignal(float,float,float,float,float,float,float,float,float,float);
@@ -83,6 +94,8 @@ signals:
     void saveTXTSignal(QString );             //保存tof/peak的值
 
     void Display_log_signal(QString str);      //打印运行信息的信号 ，发送信息到主线程
+
+    void send_cali_success_signal(QString);
 
 public slots:
 
@@ -101,6 +114,14 @@ public slots:
     void change_gain_slot(float);         //增益的改变的槽函数
 
     void change_tof_peak_slot();          //切换tof/peak的槽函数
+
+    //校正
+    float pileUp_calibration(int,int);
+
+
+    //自动校正相关
+    void start_autoCalibration_slot(int meters);
+    void calibrate_offset_slot(int index,float mean_tof);
 
 };
 

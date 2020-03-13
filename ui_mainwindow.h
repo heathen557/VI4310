@@ -45,7 +45,7 @@ public:
     QAction *openFile_action;
     QAction *saveFile_action;
     QAction *statistic_action;
-    QAction *pileUp_action;
+    QAction *autoCalibration_action;
     QWidget *centralWidget;
     QGridLayout *gridLayout_5;
     QGroupBox *groupBox;
@@ -89,7 +89,9 @@ public:
     QGridLayout *gridLayout_6;
     QToolBox *config_toolBox;
     QWidget *page;
-    QPushButton *play_pushButton;
+    QGridLayout *gridLayout_10;
+    QSpacerItem *verticalSpacer;
+    QVBoxLayout *verticalLayout;
     QGroupBox *groupBox_6;
     QGridLayout *gridLayout_8;
     QHBoxLayout *horizontalLayout_4;
@@ -117,6 +119,8 @@ public:
     QVBoxLayout *verticalLayout_2;
     QPushButton *loadSetting_pushButton;
     QPushButton *saveSetting_pushButton;
+    QPushButton *play_pushButton;
+    QSpacerItem *verticalSpacer_2;
     QWidget *page_2;
     QGroupBox *groupBox_4;
     QGridLayout *gridLayout_22;
@@ -166,11 +170,11 @@ public:
         QIcon icon3;
         icon3.addFile(QStringLiteral(":/new/prefix1/images/ccHistogram.png"), QSize(), QIcon::Normal, QIcon::Off);
         statistic_action->setIcon(icon3);
-        pileUp_action = new QAction(MainWindow);
-        pileUp_action->setObjectName(QStringLiteral("pileUp_action"));
+        autoCalibration_action = new QAction(MainWindow);
+        autoCalibration_action->setObjectName(QStringLiteral("autoCalibration_action"));
         QIcon icon4;
         icon4.addFile(QStringLiteral(":/new/prefix1/images/ccPivotAuto.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pileUp_action->setIcon(icon4);
+        autoCalibration_action->setIcon(icon4);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout_5 = new QGridLayout(centralWidget);
@@ -381,13 +385,20 @@ public:
         config_toolBox->setMinimumSize(QSize(300, 0));
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
-        page->setGeometry(QRect(0, 0, 300, 415));
-        play_pushButton = new QPushButton(page);
-        play_pushButton->setObjectName(QStringLiteral("play_pushButton"));
-        play_pushButton->setGeometry(QRect(120, 380, 80, 20));
+        page->setGeometry(QRect(0, 0, 300, 422));
+        gridLayout_10 = new QGridLayout(page);
+        gridLayout_10->setSpacing(6);
+        gridLayout_10->setContentsMargins(11, 11, 11, 11);
+        gridLayout_10->setObjectName(QStringLiteral("gridLayout_10"));
+        verticalSpacer = new QSpacerItem(20, 401, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_10->addItem(verticalSpacer, 0, 0, 1, 1);
+
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setSpacing(6);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         groupBox_6 = new QGroupBox(page);
         groupBox_6->setObjectName(QStringLiteral("groupBox_6"));
-        groupBox_6->setGeometry(QRect(40, 20, 218, 124));
         groupBox_6->setMaximumSize(QSize(16777215, 1677));
         groupBox_6->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";"));
         gridLayout_8 = new QGridLayout(groupBox_6);
@@ -442,9 +453,11 @@ public:
 
         gridLayout_8->addLayout(horizontalLayout_7, 2, 0, 1, 1);
 
+
+        verticalLayout->addWidget(groupBox_6);
+
         groupBox_7 = new QGroupBox(page);
         groupBox_7->setObjectName(QStringLiteral("groupBox_7"));
-        groupBox_7->setGeometry(QRect(40, 150, 218, 124));
         groupBox_7->setMaximumSize(QSize(16777215, 1677512));
         groupBox_7->setStyleSheet(QString::fromUtf8("font:10pt \"\351\273\221\344\275\223\";\n"
 ""));
@@ -500,9 +513,11 @@ public:
 
         gridLayout_9->addLayout(horizontalLayout_11, 2, 0, 1, 1);
 
+
+        verticalLayout->addWidget(groupBox_7);
+
         groupBox_8 = new QGroupBox(page);
         groupBox_8->setObjectName(QStringLiteral("groupBox_8"));
-        groupBox_8->setGeometry(QRect(40, 280, 218, 89));
         groupBox_8->setMaximumSize(QSize(16777215, 1677512));
         gridLayout_11 = new QGridLayout(groupBox_8);
         gridLayout_11->setSpacing(6);
@@ -524,10 +539,28 @@ public:
 
         gridLayout_11->addLayout(verticalLayout_2, 0, 0, 1, 1);
 
+
+        verticalLayout->addWidget(groupBox_8);
+
+        play_pushButton = new QPushButton(page);
+        play_pushButton->setObjectName(QStringLiteral("play_pushButton"));
+
+        verticalLayout->addWidget(play_pushButton);
+
+
+        gridLayout_10->addLayout(verticalLayout, 0, 1, 1, 1);
+
+        verticalSpacer_2 = new QSpacerItem(20, 401, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_10->addItem(verticalSpacer_2, 0, 2, 1, 1);
+
+        gridLayout_10->setColumnStretch(0, 1);
+        gridLayout_10->setColumnStretch(1, 7);
+        gridLayout_10->setColumnStretch(2, 1);
         config_toolBox->addItem(page, QString::fromUtf8("\345\237\272\346\234\254\350\256\276\347\275\256"));
         page_2 = new QWidget();
         page_2->setObjectName(QStringLiteral("page_2"));
-        page_2->setGeometry(QRect(0, 0, 300, 415));
+        page_2->setGeometry(QRect(0, 0, 300, 422));
         groupBox_4 = new QGroupBox(page_2);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
         groupBox_4->setGeometry(QRect(40, 20, 220, 141));
@@ -666,11 +699,11 @@ public:
         menu->addAction(openFile_action);
         menu->addAction(saveFile_action);
         menu_2->addAction(statistic_action);
-        menu_3->addAction(pileUp_action);
+        menu_3->addAction(autoCalibration_action);
         mainToolBar->addAction(openFile_action);
         mainToolBar->addAction(saveFile_action);
         mainToolBar->addAction(statistic_action);
-        mainToolBar->addAction(pileUp_action);
+        mainToolBar->addAction(autoCalibration_action);
 
         retranslateUi(MainWindow);
 
@@ -686,7 +719,7 @@ public:
         openFile_action->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200\346\234\254\345\234\260\346\226\207\344\273\266", Q_NULLPTR));
         saveFile_action->setText(QApplication::translate("MainWindow", "\344\277\235\345\255\230\346\226\207\344\273\266", Q_NULLPTR));
         statistic_action->setText(QApplication::translate("MainWindow", "\347\273\237\350\256\241\344\277\241\346\201\257", Q_NULLPTR));
-        pileUp_action->setText(QApplication::translate("MainWindow", "\347\233\270\346\234\272\346\240\241\346\255\243", Q_NULLPTR));
+        autoCalibration_action->setText(QApplication::translate("MainWindow", "\347\233\270\346\234\272\346\240\241\346\255\243", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("MainWindow", "3D\347\202\271\344\272\221\357\274\232", Q_NULLPTR));
         tof_peak_change_toolButton->setText(QApplication::translate("MainWindow", "tof/peak", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "\345\242\236\347\233\212\357\274\232", Q_NULLPTR));
@@ -704,7 +737,6 @@ public:
         groupBox_3->setTitle(QApplication::translate("MainWindow", "\345\274\272\345\272\246\345\233\276(peak)\357\274\232", Q_NULLPTR));
         peak_label->setText(QString());
         peak_Histogram_pushButton->setText(QApplication::translate("MainWindow", "\347\233\264\346\226\271\345\233\276", Q_NULLPTR));
-        play_pushButton->setText(QApplication::translate("MainWindow", "play", Q_NULLPTR));
         groupBox_6->setTitle(QApplication::translate("MainWindow", "\350\256\276\345\244\207\351\223\276\346\216\245\357\274\232", Q_NULLPTR));
         label_2->setText(QApplication::translate("MainWindow", "VID:", Q_NULLPTR));
         VID_lineEdit->setText(QApplication::translate("MainWindow", "8888", Q_NULLPTR));
@@ -720,6 +752,7 @@ public:
         groupBox_8->setTitle(QApplication::translate("MainWindow", "\351\205\215\347\275\256\351\233\206\357\274\232", Q_NULLPTR));
         loadSetting_pushButton->setText(QApplication::translate("MainWindow", "\345\212\240\350\275\275\351\205\215\347\275\256\351\233\206", Q_NULLPTR));
         saveSetting_pushButton->setText(QApplication::translate("MainWindow", "\344\277\235\345\255\230\351\205\215\347\275\256\351\233\206", Q_NULLPTR));
+        play_pushButton->setText(QApplication::translate("MainWindow", "play", Q_NULLPTR));
         config_toolBox->setItemText(config_toolBox->indexOf(page), QApplication::translate("MainWindow", "\345\237\272\346\234\254\350\256\276\347\275\256", Q_NULLPTR));
         groupBox_4->setTitle(QApplication::translate("MainWindow", "3D\351\274\240\346\240\207\350\256\276\347\275\256\357\274\232", Q_NULLPTR));
         label_7->setText(QApplication::translate("MainWindow", "\346\227\213\350\275\254\350\247\222\345\272\246\357\274\232", Q_NULLPTR));

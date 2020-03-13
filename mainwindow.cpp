@@ -120,6 +120,7 @@ void MainWindow::init_connect()
     connect(this,SIGNAL(openLink_signal(int,int)),recvUsbMsg_obj,SLOT(openLinkDevSlot(int,int)));
     connect(recvUsbMsg_obj,SIGNAL(Display_log_signal(QString)),this,SLOT(Display_log_slot(QString)));
     connect(recvUsbMsg_obj,SIGNAL(linkInfoSignal(int)),this,SLOT(USB_linkInfoSlot(int)));
+    connect(this,SIGNAL(closeLinkSignal()),recvUsbMsg_obj,SLOT(closeUSB()));
     connect(this,SIGNAL(readSysSignal(int,bool)),recvUsbMsg_obj,SLOT(readSysSlot(int,bool)));
     connect(recvUsbMsg_obj,&ReceUSB_Msg::reReadSysSignal,this,&MainWindow::reReadSysSlot);
     connect(this,&MainWindow::writeSysSignal,recvUsbMsg_obj,&ReceUSB_Msg::writeSysSlot);
@@ -245,13 +246,13 @@ void MainWindow::show_image_timer_slot()
 void MainWindow::queryPixel_showToolTip_slot(int x,int y)
 {
 
-    float width_scale = ui->tof_label->width()/256.0;
-    float height_scale = ui->tof_label->height()/64.0;
+    float width_scale = ui->tof_label->width()/160.0;
+    float height_scale = ui->tof_label->height()/120.0;
 
     int y_index = y/height_scale;
     int x_index = x/width_scale;
 //    qDebug()<<"y_index="<<y_index<<"  x_index ="<<x_index;
-    int index = 256*y_index + x_index;
+    int index = 160*y_index + x_index;
     mouseShowMutex.lock();
     QString str= "x="+QString::number(x_index)+",y="+QString::number(y_index)+",Depth="+QString::number(mouseShowTOF[x_index][y_index])+"m,peak="+QString::number(mouseShowPEAK[x_index][y_index]);
     mouseShowMutex.unlock();
@@ -403,7 +404,7 @@ void MainWindow::on_linkUSB_pushButton_clicked()
         int pid = ui->PID_lineEdit->text().toInt(NULL,16);
         emit openLink_signal(vid,pid);
 
-    }else if(ui->linkUSB_pushButton->text() == QStringLiteral("关闭连接"))
+    }else
     {
         isRecvFlag = false;
         isLinkSuccess = false;
@@ -563,4 +564,13 @@ void MainWindow::USB_linkInfoSlot(int flag )
         isLinkSuccess = false;
         ui->linkUSB_pushButton->setText(QStringLiteral("连接设备"));
     }
+}
+
+
+
+//自动校准的窗口
+void MainWindow::on_autoCalibration_action_triggered()
+{
+    autoCal_dia.setModal(true);
+    autoCal_dia.show();
 }

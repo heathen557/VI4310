@@ -25,6 +25,7 @@ void statisticsDialog::initTofMean_slot()
 
     tofMean_graph = new Q3DSurface();
     tofMean_container = QWidget::createWindowContainer(tofMean_graph);
+
     //! [0]
 
     if (!tofMean_graph->hasContext()) {

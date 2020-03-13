@@ -37,7 +37,8 @@ SOURCES += main.cpp\
     surfacegraph.cpp \
     filesave_dialog.cpp \
     calmeanstdthread.cpp \
-    receusb_msg.cpp
+    receusb_msg.cpp \
+    autocalibration_dialog.cpp
 
 
 
@@ -53,11 +54,13 @@ HEADERS  += mainwindow.h \
     surfacegraph.h \
     filesave_dialog.h \
     calmeanstdthread.h \
-    receusb_msg.h
+    receusb_msg.h \
+    autocalibration_dialog.h
 
 FORMS    += mainwindow.ui\
     statisticsdialog.ui \
-    filesave_dialog.ui
+    filesave_dialog.ui \
+    autocalibration_dialog.ui
 
 
 RESOURCES += \

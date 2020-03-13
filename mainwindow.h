@@ -10,6 +10,7 @@
 #include"savepcdthread.h"
 #include"calmeanstdthread.h"
 #include"receusb_msg.h"
+#include"autocalibration_dialog.h"
 
 
 
@@ -89,6 +90,8 @@ private slots:
 
     void USB_linkInfoSlot(int );
 
+    void on_autoCalibration_action_triggered();
+
 signals:
     void change_gain_signal(float);
     void change_tof_peak_signal();
@@ -111,15 +114,17 @@ private:
     savePCDThread* savePcd_obj;
 
     QThread *calThread;
-    calMeanStdThread *calMeanStd_obj; //计算均值、方差线程相关
+    calMeanStdThread *calMeanStd_obj;     //计算均值、方差线程相关
 
     QThread *recvUsb_thread;
-    ReceUSB_Msg *recvUsbMsg_obj;      //接收USB 数据相关线程
+    ReceUSB_Msg *recvUsbMsg_obj;          //接收USB 数据相关线程
 
-    QString localFileDirPath;           //本地播放文件
-    statisticsDialog  statisticsDia_; //统计信息界面
-    fileSave_Dialog fileSave_dia;     //文件保存界面
-    QTimer show_image_timer;         //2D图像显示的定时器
+    QString localFileDirPath;            //本地播放文件
+    statisticsDialog  statisticsDia_;   //统计信息界面
+    fileSave_Dialog fileSave_dia;       //文件保存界面
+    QTimer show_image_timer;            //2D图像显示的定时器
+
+    autoCalibration_Dialog autoCal_dia;   //自动校正的窗口
 
 
     /**********USB 连接信息相关****************/

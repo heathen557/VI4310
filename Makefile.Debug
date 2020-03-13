@@ -56,7 +56,8 @@ SOURCES       = main.cpp \
 		surfacegraph.cpp \
 		filesave_dialog.cpp \
 		calmeanstdthread.cpp \
-		receusb_msg.cpp debug\qrc_imgsource.cpp \
+		receusb_msg.cpp \
+		autocalibration_dialog.cpp debug\qrc_imgsource.cpp \
 		debug\moc_mainwindow.cpp \
 		debug\moc_mylabel.cpp \
 		debug\moc_control_textedit.cpp \
@@ -68,7 +69,8 @@ SOURCES       = main.cpp \
 		debug\moc_surfacegraph.cpp \
 		debug\moc_filesave_dialog.cpp \
 		debug\moc_calmeanstdthread.cpp \
-		debug\moc_receusb_msg.cpp
+		debug\moc_receusb_msg.cpp \
+		debug\moc_autocalibration_dialog.cpp
 OBJECTS       = debug\main.obj \
 		debug\mainwindow.obj \
 		debug\mylabel.obj \
@@ -83,6 +85,7 @@ OBJECTS       = debug\main.obj \
 		debug\filesave_dialog.obj \
 		debug\calmeanstdthread.obj \
 		debug\receusb_msg.obj \
+		debug\autocalibration_dialog.obj \
 		debug\qrc_imgsource.obj \
 		debug\moc_mainwindow.obj \
 		debug\moc_mylabel.obj \
@@ -95,7 +98,8 @@ OBJECTS       = debug\main.obj \
 		debug\moc_surfacegraph.obj \
 		debug\moc_filesave_dialog.obj \
 		debug\moc_calmeanstdthread.obj \
-		debug\moc_receusb_msg.obj
+		debug\moc_receusb_msg.obj \
+		debug\moc_autocalibration_dialog.obj
 
 DIST          =  mainwindow.h \
 		mylabel.h \
@@ -109,7 +113,8 @@ DIST          =  mainwindow.h \
 		surfacegraph.h \
 		filesave_dialog.h \
 		calmeanstdthread.h \
-		receusb_msg.h main.cpp \
+		receusb_msg.h \
+		autocalibration_dialog.h main.cpp \
 		mainwindow.cpp \
 		mylabel.cpp \
 		control_textedit.cpp \
@@ -122,7 +127,8 @@ DIST          =  mainwindow.h \
 		surfacegraph.cpp \
 		filesave_dialog.cpp \
 		calmeanstdthread.cpp \
-		receusb_msg.cpp
+		receusb_msg.cpp \
+		autocalibration_dialog.cpp
 QMAKE_TARGET  = VI4310_Version01
 DESTDIR        = debug\ #avoid trailing-slash linebreak
 TARGET         = VI4310_Version01.exe
@@ -177,7 +183,7 @@ DESTDIR_TARGET = debug\VI4310_Version01.exe
 first: all
 all: Makefile.Debug  $(DESTDIR_TARGET)
 
-$(DESTDIR_TARGET): ui_mainwindow.h ui_statisticsdialog.h ui_filesave_dialog.h $(OBJECTS) 
+$(DESTDIR_TARGET): ui_mainwindow.h ui_statisticsdialog.h ui_filesave_dialog.h ui_autocalibration_dialog.h $(OBJECTS) 
 	$(LINKER) $(LFLAGS) /MANIFEST:embed /OUT:$(DESTDIR_TARGET) @<<
 $(OBJECTS) $(LIBS)
 <<
@@ -188,10 +194,10 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) VI4310_Version01.zip $(SOURCES) $(DIST) VI4310_Version01.pro ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\spec_pre.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\common\angle.conf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\common\msvc-base.conf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\common\msvc-desktop.conf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\qconfig.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dcore.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dcore_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dextras.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dextras_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dinput.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dinput_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dlogic.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dlogic_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquick.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquick_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickextras.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickextras_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickinput.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickinput_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickrender.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickrender_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3drender.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3drender_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_accessibility_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axbase.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axbase_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axcontainer.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axcontainer_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axserver.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axserver_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_bluetooth.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_bluetooth_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_bootstrap_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_charts.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_charts_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_clucene_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_concurrent.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_concurrent_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_core.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_core_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_datavisualization.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_datavisualization_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_dbus.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_dbus_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_designer.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_designer_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_designercomponents_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_egl_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_fb_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_fontdatabase_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_gamepad.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_gamepad_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_gui.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_gui_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_help.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_help_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_location.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_location_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_multimedia.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_multimedia_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_multimediawidgets.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_network.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_network_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_networkauth.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_networkauth_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_nfc.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_nfc_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_opengl.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_opengl_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_openglextensions.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_openglextensions_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_packetprotocol_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_platformcompositor_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_positioning.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_positioning_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_printsupport.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_printsupport_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_purchasing.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_purchasing_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qml.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qml_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qmldebug_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qmldevtools_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qmltest.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qmltest_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quick.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quick_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quickcontrols2.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quickparticles_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quickwidgets.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quickwidgets_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_script.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_script_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_scripttools.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_scripttools_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_scxml.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_scxml_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_sensors.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_sensors_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_serialbus.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_serialbus_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_serialport.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_serialport_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_sql.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_sql_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_svg.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_svg_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_testlib.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_testlib_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_texttospeech.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_texttospeech_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_theme_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_uiplugin.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_uitools.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_uitools_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webchannel.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webchannel_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webengine.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webengine_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webenginecore.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webenginecore_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webenginecoreheaders_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webenginewidgets.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webenginewidgets_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_websockets.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_websockets_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webview.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webview_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_widgets.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_widgets_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_winextras.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_winextras_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_xml.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_xml_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_xmlpatterns.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_xmlpatterns_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_zlib_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\qt_functions.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\qt_config.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\win32-msvc2015\qmake.conf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\spec_post.prf ..\.qmake.stash ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\exclusive_builds.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\toolchain.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\default_pre.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\win32\default_pre.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\resolve_config.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\exclusive_builds_post.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\default_post.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\build_pass.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\qml_debug.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\win32\rtti.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\precompile_header.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\warn_on.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\qt.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\resources.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\moc.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\win32\opengl.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\uic.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\qmake_use.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\file_copies.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\win32\windows.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\testcase_targets.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\exceptions.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\yacc.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\lex.prf VI4310_Version01.pro imgsource.qrc ..\..\programInstall\QT580\5.8\msvc2015_64\lib\qtmaind.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5DataVisualizationd.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5MultimediaWidgetsd.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5Multimediad.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5Widgetsd.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5Guid.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5Networkd.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5Cored.prl   imgsource.qrc ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\data\dummy.cpp mainwindow.h mylabel.h control_textedit.h globaldata.h glwidget.h logo.h dealusb_msg.h savepcdthread.h statisticsdialog.h surfacegraph.h filesave_dialog.h calmeanstdthread.h receusb_msg.h main.cpp mainwindow.cpp mylabel.cpp control_textedit.cpp glwidget.cpp logo.cpp dealusb_msg.cpp globaldata.cpp savepcdthread.cpp statisticsdialog.cpp surfacegraph.cpp filesave_dialog.cpp calmeanstdthread.cpp receusb_msg.cpp mainwindow.ui statisticsdialog.ui filesave_dialog.ui    
+	$(ZIP) VI4310_Version01.zip $(SOURCES) $(DIST) VI4310_Version01.pro ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\spec_pre.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\common\angle.conf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\common\msvc-base.conf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\common\msvc-desktop.conf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\qconfig.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dcore.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dcore_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dextras.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dextras_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dinput.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dinput_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dlogic.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dlogic_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquick.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquick_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickextras.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickextras_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickinput.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickinput_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickrender.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3dquickrender_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3drender.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_3drender_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_accessibility_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axbase.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axbase_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axcontainer.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axcontainer_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axserver.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_axserver_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_bluetooth.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_bluetooth_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_bootstrap_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_charts.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_charts_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_clucene_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_concurrent.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_concurrent_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_core.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_core_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_datavisualization.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_datavisualization_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_dbus.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_dbus_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_designer.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_designer_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_designercomponents_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_devicediscovery_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_egl_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_fb_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_fontdatabase_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_gamepad.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_gamepad_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_gui.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_gui_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_help.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_help_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_location.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_location_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_multimedia.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_multimedia_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_multimediawidgets.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_network.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_network_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_networkauth.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_networkauth_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_nfc.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_nfc_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_opengl.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_opengl_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_openglextensions.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_openglextensions_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_packetprotocol_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_platformcompositor_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_positioning.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_positioning_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_printsupport.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_printsupport_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_purchasing.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_purchasing_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qml.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qml_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qmldebug_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qmldevtools_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qmltest.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qmltest_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quick.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quick_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quickcontrols2.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quickcontrols2_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quickparticles_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quicktemplates2_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quickwidgets.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_quickwidgets_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_script.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_script_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_scripttools.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_scripttools_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_scxml.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_scxml_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_sensors.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_sensors_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_serialbus.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_serialbus_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_serialport.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_serialport_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_sql.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_sql_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_svg.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_svg_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_testlib.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_testlib_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_texttospeech.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_texttospeech_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_theme_support_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_uiplugin.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_uitools.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_uitools_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webchannel.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webchannel_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webengine.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webengine_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webenginecore.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webenginecore_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webenginecoreheaders_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webenginewidgets.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webenginewidgets_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_websockets.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_websockets_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webview.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_webview_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_widgets.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_widgets_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_winextras.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_winextras_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_xml.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_xml_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_xmlpatterns.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_xmlpatterns_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\modules\qt_lib_zlib_private.pri ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\qt_functions.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\qt_config.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\win32-msvc2015\qmake.conf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\spec_post.prf ..\.qmake.stash ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\exclusive_builds.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\toolchain.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\default_pre.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\win32\default_pre.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\resolve_config.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\exclusive_builds_post.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\default_post.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\build_pass.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\qml_debug.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\win32\rtti.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\precompile_header.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\warn_on.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\qt.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\resources.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\moc.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\win32\opengl.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\uic.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\qmake_use.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\file_copies.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\win32\windows.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\testcase_targets.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\exceptions.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\yacc.prf ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\lex.prf VI4310_Version01.pro imgsource.qrc ..\..\programInstall\QT580\5.8\msvc2015_64\lib\qtmaind.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5DataVisualizationd.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5MultimediaWidgetsd.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5Multimediad.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5Widgetsd.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5Guid.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5Networkd.prl ..\..\programInstall\QT580\5.8\msvc2015_64\lib\Qt5Cored.prl   imgsource.qrc ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\data\dummy.cpp mainwindow.h mylabel.h control_textedit.h globaldata.h glwidget.h logo.h dealusb_msg.h savepcdthread.h statisticsdialog.h surfacegraph.h filesave_dialog.h calmeanstdthread.h receusb_msg.h autocalibration_dialog.h main.cpp mainwindow.cpp mylabel.cpp control_textedit.cpp glwidget.cpp logo.cpp dealusb_msg.cpp globaldata.cpp savepcdthread.cpp statisticsdialog.cpp surfacegraph.cpp filesave_dialog.cpp calmeanstdthread.cpp receusb_msg.cpp autocalibration_dialog.cpp mainwindow.ui statisticsdialog.ui filesave_dialog.ui autocalibration_dialog.ui    
 
 clean: compiler_clean 
-	-$(DEL_FILE) debug\main.obj debug\mainwindow.obj debug\mylabel.obj debug\control_textedit.obj debug\glwidget.obj debug\logo.obj debug\dealusb_msg.obj debug\globaldata.obj debug\savepcdthread.obj debug\statisticsdialog.obj debug\surfacegraph.obj debug\filesave_dialog.obj debug\calmeanstdthread.obj debug\receusb_msg.obj debug\qrc_imgsource.obj debug\moc_mainwindow.obj debug\moc_mylabel.obj debug\moc_control_textedit.obj debug\moc_glwidget.obj debug\moc_logo.obj debug\moc_dealusb_msg.obj debug\moc_savepcdthread.obj debug\moc_statisticsdialog.obj debug\moc_surfacegraph.obj debug\moc_filesave_dialog.obj debug\moc_calmeanstdthread.obj debug\moc_receusb_msg.obj
+	-$(DEL_FILE) debug\main.obj debug\mainwindow.obj debug\mylabel.obj debug\control_textedit.obj debug\glwidget.obj debug\logo.obj debug\dealusb_msg.obj debug\globaldata.obj debug\savepcdthread.obj debug\statisticsdialog.obj debug\surfacegraph.obj debug\filesave_dialog.obj debug\calmeanstdthread.obj debug\receusb_msg.obj debug\autocalibration_dialog.obj debug\qrc_imgsource.obj debug\moc_mainwindow.obj debug\moc_mylabel.obj debug\moc_control_textedit.obj debug\moc_glwidget.obj debug\moc_logo.obj debug\moc_dealusb_msg.obj debug\moc_savepcdthread.obj debug\moc_statisticsdialog.obj debug\moc_surfacegraph.obj debug\moc_filesave_dialog.obj debug\moc_calmeanstdthread.obj debug\moc_receusb_msg.obj debug\moc_autocalibration_dialog.obj
 	-$(DEL_FILE) debug\VI4310_Version01.exp debug\VI4310_Version01.vc.pdb debug\VI4310_Version01.ilk debug\VI4310_Version01.idb
 
 distclean: clean 
@@ -363,9 +369,9 @@ compiler_moc_predefs_clean:
 debug\moc_predefs.h: ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\data\dummy.cpp
 	cl -BxD:\programInstall\QT580\5.8\msvc2015_64\bin\qmake.exe -nologo -Zc:wchar_t -FS -Zc:strictStrings -Zc:throwingNew -Zi -MDd -GR -W3 -w34100 -w34189 -w44996 -w44456 -w44457 -w44458 -wd4577 -wd4467 -E -Za ..\..\programInstall\QT580\5.8\msvc2015_64\mkspecs\features\data\dummy.cpp 2>NUL >debug\moc_predefs.h
 
-compiler_moc_header_make_all: debug\moc_mainwindow.cpp debug\moc_mylabel.cpp debug\moc_control_textedit.cpp debug\moc_glwidget.cpp debug\moc_logo.cpp debug\moc_dealusb_msg.cpp debug\moc_savepcdthread.cpp debug\moc_statisticsdialog.cpp debug\moc_surfacegraph.cpp debug\moc_filesave_dialog.cpp debug\moc_calmeanstdthread.cpp debug\moc_receusb_msg.cpp
+compiler_moc_header_make_all: debug\moc_mainwindow.cpp debug\moc_mylabel.cpp debug\moc_control_textedit.cpp debug\moc_glwidget.cpp debug\moc_logo.cpp debug\moc_dealusb_msg.cpp debug\moc_savepcdthread.cpp debug\moc_statisticsdialog.cpp debug\moc_surfacegraph.cpp debug\moc_filesave_dialog.cpp debug\moc_calmeanstdthread.cpp debug\moc_receusb_msg.cpp debug\moc_autocalibration_dialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) debug\moc_mainwindow.cpp debug\moc_mylabel.cpp debug\moc_control_textedit.cpp debug\moc_glwidget.cpp debug\moc_logo.cpp debug\moc_dealusb_msg.cpp debug\moc_savepcdthread.cpp debug\moc_statisticsdialog.cpp debug\moc_surfacegraph.cpp debug\moc_filesave_dialog.cpp debug\moc_calmeanstdthread.cpp debug\moc_receusb_msg.cpp
+	-$(DEL_FILE) debug\moc_mainwindow.cpp debug\moc_mylabel.cpp debug\moc_control_textedit.cpp debug\moc_glwidget.cpp debug\moc_logo.cpp debug\moc_dealusb_msg.cpp debug\moc_savepcdthread.cpp debug\moc_statisticsdialog.cpp debug\moc_surfacegraph.cpp debug\moc_filesave_dialog.cpp debug\moc_calmeanstdthread.cpp debug\moc_receusb_msg.cpp debug\moc_autocalibration_dialog.cpp
 debug\moc_mainwindow.cpp: ..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QMainWindow \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qmainwindow.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtwidgetsglobal.h \
@@ -17206,11 +17212,118 @@ debug\moc_receusb_msg.cpp: ..\..\pcl\PCL1.8.1\include\pcl-1.8\pcl\io\pcd_io.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\bin\moc.exe
 	D:\programInstall\QT580\5.8\msvc2015_64\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include debug/moc_predefs.h -ID:/programInstall/QT580/5.8/msvc2015_64/mkspecs/win32-msvc2015 -ID:/QtProgram/VI4310_Version01_usb -ID:/pcl/PCL1.8.1/include/pcl-1.8 -IC:/Tool/PCL/PCL1.8.0/include/pcl-1.8/pcl -ID:/QtProgram/VI4310_Version01_usb/INCLUDEPATH -I"D:/QtProgram/VI4310_Version01_usb/+=" -ID:/pcl/PCL1.8.1/include/pcl-1.8/pcl -ID:/pcl/PCL1.8.1/3rdParty/Boost/include/boost-1_64 -ID:/pcl/PCL1.8.1/3rdParty/Eigen/eigen3 -ID:/pcl/PCL1.8.1/3rdParty/FLANN/include -ID:/pcl/PCL1.8.1/3rdParty/FLANN/include/flann -ID:/pcl/PCL1.8.1/3rdParty/OpenNI2/Include -ID:/programInstall/pcl/PCL1.8.1/3rdParty/Qhull/include -ID:/pcl/PCL1.8.1/3rdParty/VTK/include/vtk-8.0 -ID:/programInstall/QT580/5.8/msvc2015_64/include -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtDataVisualization -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtMultimediaWidgets -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtMultimedia -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtWidgets -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtGui -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtANGLE -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtNetwork -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtCore -ID:\programInstall\VS2015\VC\INCLUDE -ID:\programInstall\VS2015\VC\ATLMFC\INCLUDE -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.10150.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6\include\um" -I"C:\Program Files (x86)\Windows Kits\8.1\include\shared" -I"C:\Program Files (x86)\Windows Kits\8.1\include\um" -I"C:\Program Files (x86)\Windows Kits\8.1\include\winrt" receusb_msg.h -o debug\moc_receusb_msg.cpp
 
+debug\moc_autocalibration_dialog.cpp: ..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QDialog \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qdialog.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtwidgetsglobal.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qtguiglobal.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qglobal.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qconfig-bootstrapped.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qconfig.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qtcore-config.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qsystemdetection.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qprocessordetection.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qcompilerdetection.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qtypeinfo.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qsysinfo.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qlogging.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qflags.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qtypetraits.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qatomic.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qbasicatomic.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qatomic_bootstrap.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qgenericatomic.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qatomic_cxx11.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qatomic_msvc.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qglobalstatic.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qmutex.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qnumeric.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qversiontagging.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qtgui-config.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtwidgets-config.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qwidget.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qwindowdefs.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qobjectdefs.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qnamespace.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qobjectdefs_impl.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qwindowdefs_win.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qobject.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qstring.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qchar.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qbytearray.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qrefcount.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qarraydata.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qstringbuilder.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qlist.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qalgorithms.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qiterator.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qhashfunctions.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qpair.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qbytearraylist.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qstringlist.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qregexp.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qstringmatcher.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qcoreevent.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qscopedpointer.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qmetatype.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qvarlengtharray.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qcontainerfwd.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qobject_impl.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qmargins.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpaintdevice.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qrect.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qsize.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qpoint.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpalette.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qcolor.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qrgb.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qrgba64.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qbrush.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qvector.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qmatrix.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpolygon.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qregion.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qdatastream.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qiodevice.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qline.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qtransform.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpainterpath.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qimage.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpixelformat.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpixmap.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qsharedpointer.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qshareddata.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qhash.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qsharedpointer_impl.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qfont.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qfontmetrics.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qfontinfo.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qsizepolicy.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qcursor.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qkeysequence.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qevent.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qvariant.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qmap.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qdebug.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qtextstream.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qlocale.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qset.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qcontiguouscache.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qurl.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qurlquery.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qfile.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qfiledevice.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qvector2d.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qtouchdevice.h \
+		autocalibration_dialog.h \
+		debug\moc_predefs.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\bin\moc.exe
+	D:\programInstall\QT580\5.8\msvc2015_64\bin\moc.exe $(DEFINES) --compiler-flavor=msvc --include debug/moc_predefs.h -ID:/programInstall/QT580/5.8/msvc2015_64/mkspecs/win32-msvc2015 -ID:/QtProgram/VI4310_Version01_usb -ID:/pcl/PCL1.8.1/include/pcl-1.8 -IC:/Tool/PCL/PCL1.8.0/include/pcl-1.8/pcl -ID:/QtProgram/VI4310_Version01_usb/INCLUDEPATH -I"D:/QtProgram/VI4310_Version01_usb/+=" -ID:/pcl/PCL1.8.1/include/pcl-1.8/pcl -ID:/pcl/PCL1.8.1/3rdParty/Boost/include/boost-1_64 -ID:/pcl/PCL1.8.1/3rdParty/Eigen/eigen3 -ID:/pcl/PCL1.8.1/3rdParty/FLANN/include -ID:/pcl/PCL1.8.1/3rdParty/FLANN/include/flann -ID:/pcl/PCL1.8.1/3rdParty/OpenNI2/Include -ID:/programInstall/pcl/PCL1.8.1/3rdParty/Qhull/include -ID:/pcl/PCL1.8.1/3rdParty/VTK/include/vtk-8.0 -ID:/programInstall/QT580/5.8/msvc2015_64/include -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtDataVisualization -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtMultimediaWidgets -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtMultimedia -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtWidgets -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtGui -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtANGLE -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtNetwork -ID:/programInstall/QT580/5.8/msvc2015_64/include/QtCore -ID:\programInstall\VS2015\VC\INCLUDE -ID:\programInstall\VS2015\VC\ATLMFC\INCLUDE -I"C:\Program Files (x86)\Windows Kits\10\include\10.0.10150.0\ucrt" -I"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6\include\um" -I"C:\Program Files (x86)\Windows Kits\8.1\include\shared" -I"C:\Program Files (x86)\Windows Kits\8.1\include\um" -I"C:\Program Files (x86)\Windows Kits\8.1\include\winrt" autocalibration_dialog.h -o debug\moc_autocalibration_dialog.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_statisticsdialog.h ui_filesave_dialog.h
+compiler_uic_make_all: ui_mainwindow.h ui_statisticsdialog.h ui_filesave_dialog.h ui_autocalibration_dialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_statisticsdialog.h ui_filesave_dialog.h
+	-$(DEL_FILE) ui_mainwindow.h ui_statisticsdialog.h ui_filesave_dialog.h ui_autocalibration_dialog.h
 ui_mainwindow.h: mainwindow.ui \
 		..\..\programInstall\QT580\5.8\msvc2015_64\bin\uic.exe \
 		glwidget.h \
@@ -19916,6 +20029,10 @@ ui_statisticsdialog.h: statisticsdialog.ui \
 ui_filesave_dialog.h: filesave_dialog.ui \
 		..\..\programInstall\QT580\5.8\msvc2015_64\bin\uic.exe
 	D:\programInstall\QT580\5.8\msvc2015_64\bin\uic.exe filesave_dialog.ui -o ui_filesave_dialog.h
+
+ui_autocalibration_dialog.h: autocalibration_dialog.ui \
+		..\..\programInstall\QT580\5.8\msvc2015_64\bin\uic.exe
+	D:\programInstall\QT580\5.8\msvc2015_64\bin\uic.exe autocalibration_dialog.ui -o ui_autocalibration_dialog.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -41898,6 +42015,113 @@ debug\receusb_msg.obj: receusb_msg.cpp receusb_msg.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qfiledevice.h \
 		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\QDataStream
 
+debug\autocalibration_dialog.obj: autocalibration_dialog.cpp autocalibration_dialog.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QDialog \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qdialog.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtwidgetsglobal.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qtguiglobal.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qglobal.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qconfig-bootstrapped.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qconfig.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qtcore-config.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qsystemdetection.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qprocessordetection.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qcompilerdetection.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qtypeinfo.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qsysinfo.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qlogging.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qflags.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qtypetraits.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qatomic.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qbasicatomic.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qatomic_bootstrap.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qgenericatomic.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qatomic_cxx11.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qatomic_msvc.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qglobalstatic.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qmutex.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qnumeric.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qversiontagging.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qtgui-config.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qtwidgets-config.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qwidget.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qwindowdefs.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qobjectdefs.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qnamespace.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qobjectdefs_impl.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qwindowdefs_win.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qobject.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qstring.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qchar.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qbytearray.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qrefcount.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qarraydata.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qstringbuilder.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qlist.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qalgorithms.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qiterator.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qhashfunctions.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qpair.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qbytearraylist.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qstringlist.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qregexp.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qstringmatcher.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qcoreevent.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qscopedpointer.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qmetatype.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qvarlengtharray.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qcontainerfwd.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qobject_impl.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qmargins.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpaintdevice.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qrect.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qsize.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qpoint.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpalette.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qcolor.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qrgb.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qrgba64.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qbrush.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qvector.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qmatrix.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpolygon.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qregion.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qdatastream.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qiodevice.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qline.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qtransform.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpainterpath.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qimage.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpixelformat.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qpixmap.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qsharedpointer.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qshareddata.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qhash.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qsharedpointer_impl.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qfont.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qfontmetrics.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qfontinfo.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qsizepolicy.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qcursor.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qkeysequence.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qevent.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qvariant.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qmap.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qdebug.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qtextstream.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qlocale.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qset.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qcontiguouscache.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qurl.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qurlquery.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qfile.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtCore\qfiledevice.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qvector2d.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtGui\qtouchdevice.h \
+		ui_autocalibration_dialog.h \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\QMessageBox \
+		..\..\programInstall\QT580\5.8\msvc2015_64\include\QtWidgets\qmessagebox.h
+
 debug\qrc_imgsource.obj: debug\qrc_imgsource.cpp 
 
 debug\moc_mainwindow.obj: debug\moc_mainwindow.cpp 
@@ -41923,6 +42147,8 @@ debug\moc_filesave_dialog.obj: debug\moc_filesave_dialog.cpp
 debug\moc_calmeanstdthread.obj: debug\moc_calmeanstdthread.cpp 
 
 debug\moc_receusb_msg.obj: debug\moc_receusb_msg.cpp 
+
+debug\moc_autocalibration_dialog.obj: debug\moc_autocalibration_dialog.cpp 
 
 ####### Install
 
