@@ -331,6 +331,35 @@ void ReceUSB_Msg::read_usb()
         {
             mArray = QByteArray(MyBuffer,ret);
             emit recvMsgSignal(mArray);
+        }else if(ret <260)
+        {
+//            mArray = QByteArray(MyBuffer,ret);
+
+//            if(4 == ret && 0 == tmpArray.size())
+//            {
+//                tmpArray.append(mArray);
+//            }
+//            if(256 == ret && 4 == tmpArray.size())
+//            {
+//                tmpArray.append(mArray);
+//                emit recvMsgSignal(tmpArray);
+//                tmpArray.clear();
+//            }
+
+
+            mArray = QByteArray(MyBuffer,ret);
+            if(4 == ret)
+            {
+                tmpArray.clear();
+                tmpArray.append(mArray);
+            }
+            if(256 == ret && 4 == tmpArray.size())
+            {
+                tmpArray.append(mArray);
+                emit recvMsgSignal(tmpArray);
+                tmpArray.clear();
+            }
+
         }
 
     }//while

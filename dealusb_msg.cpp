@@ -1,5 +1,5 @@
 ﻿#include "dealusb_msg.h"
-
+#define miu_meter 1e-3
 
 //图像显示相关
 extern QMutex mutex_3D;  //3D点云/2D传输的互斥锁
@@ -51,6 +51,15 @@ DealUsb_msg::DealUsb_msg(QObject *parent) : QObject(parent),
     isOnlyCenterShow_flag = false;   //是否只显示中心区域的标识，设置为true则只显示中心光较强的区域（超过范围的点xyz坐标全部设置为0），设置为false则显示全部点云数据；默认false;
     averageNum = 1;            //滑动平均的帧数 , 默认为1
 
+    /********pileUp 以及自动校准相关的参数***************/
+    is_pileUp_flag = true;
+    isAutoCalibration_flag = false;  //默认不适用
+    ishave_Four = 0 ;               // 初始设置为0，逐渐+1 ==4 时进行判断
+    calibration_mean_num = 1;
+
+    camera_dis = 44.63;
+    f = 5.7;
+
 
     //总共有16384个点，针对每一个点开启一个独立的容器进行存储相关内容    统计相关
     statisticStartFlag = true;
@@ -74,7 +83,7 @@ void DealUsb_msg::loadLocalArray()
 
     //加载tofOffsetArray.txt配置集
     QFile tofOffsetArray_file("tofOffsetArray.txt");
-    QString tofOffsetArray_line[16400];
+    QString tofOffsetArray_line[19210];
     QString log_str;
     if (tofOffsetArray_file.open(QIODevice::ReadOnly|QIODevice::Text))
     {
@@ -87,7 +96,7 @@ void DealUsb_msg::loadLocalArray()
         }
         tofOffsetArray_file.close();
 
-        if(i<16383)
+        if(i<19199)
         {
             log_str = "[load conf file error]:tofOffsetArray.txt";
             emit Display_log_signal(log_str);
@@ -103,69 +112,78 @@ void DealUsb_msg::loadLocalArray()
 
 
 
-    //加载thetaArray.txt配置集
-    QFile thetaArray_file("thetaArray.txt");
-    QString thetaArray_line[16400];
-    if (thetaArray_file.open(QIODevice::ReadOnly|QIODevice::Text))
+    //加载xf_position.txt配置集
+    QFile xf_position_file("xf_position.txt");
+    QString xf_position_line[200];
+    if (xf_position_file.open(QIODevice::ReadOnly|QIODevice::Text))
     {
-        QTextStream in(&thetaArray_file);
+        QTextStream in(&xf_position_file);
         int i = 0;
         while (!in.atEnd())
         {
-            thetaArray_line[i] = in.readLine();
+            xf_position_line[i] = in.readLine();
             i++;
         }
-        thetaArray_file.close();
+        xf_position_file.close();
 
-        if(i<16383)
+        if(i<159)
         {
-            log_str = "[load conf file error]:thetaArray.txt";
+            log_str = "[load conf file error]:xf_position.txt";
             emit Display_log_signal(log_str);
         }else{
-            log_str = "[load conf file success]:thetaArray.txt";
+            log_str = "[load conf file success]:xf_position.txt";
             emit Display_log_signal(log_str);
         }
     }else{
-        log_str = "[load conf file error]:thetaArray.txt";
+        log_str = "[load conf file error]:xf_position.txt";
         emit Display_log_signal(log_str);
     }
 
 
-    //加载betaArray.txt配置集
-    QFile betaArray_file("betaArray.txt");
-    QString betaArray_line[16400];
-    if (betaArray_file.open(QIODevice::ReadOnly|QIODevice::Text))
+    //加载yf_position.txt配置集
+    QFile yf_position_file("yf_position.txt");
+    QString yf_position_line[200];
+    if (yf_position_file.open(QIODevice::ReadOnly|QIODevice::Text))
     {
-        QTextStream in(&betaArray_file);
+        QTextStream in(&yf_position_file);
         int i = 0;
         while (!in.atEnd())
         {
-            betaArray_line[i] = in.readLine();
+            yf_position_line[i] = in.readLine();
             i++;
         }
-        betaArray_file.close();
+        yf_position_file.close();
 
-        if(i<16383)
+        if(i<119)
         {
-            log_str = "[load conf file error]:betaArray.txt";
+            log_str = "[load conf file error]:yf_position.txt";
             emit Display_log_signal(log_str);
         }else {
-            log_str = "[load conf file success]:betaArray.txt";
+            log_str = "[load conf file success]:yf_position.txt";
             emit Display_log_signal(log_str);
         }
     }else{
-        log_str = "[load conf file error]:betaArray.txt";
+        log_str = "[load conf file error]:yf_position.txt";
         emit Display_log_signal(log_str);
     }
 
 
 
-    for(int i=0;i<16384;i++)
+    for(int i=0;i<19200;i++)
     {
         tofOffsetArray[i] = tofOffsetArray_line[i].toFloat();
-        thetaArray[i] = thetaArray_line[i].toFloat();
-        betaArray[i] = betaArray_line[i].toFloat();
-        //        qDebug()<<"thetaArray["<<i<<"] = "<<thetaArray[i]<<endl;
+    }
+
+    for(int i=0; i<160; i++)
+    {
+        xf_position[i] = xf_position_line[i].toFloat();
+        qDebug()<<"xf_position = "<<i<<"   = "<<xf_position[i];
+    }
+
+    for(int i=0; i<120; i++)
+    {
+        yf_position[i] = yf_position_line[i].toFloat();
+        qDebug()<<"yf_position = "<<i<<"  = "<<yf_position_line[i].toFloat();
     }
 }
 
@@ -239,7 +257,7 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
 
     if(line_number > 1 )
     {
-        qDebug()<<"line_number error,  LineNum="<<line_number;
+//        qDebug()<<"line_number error,  LineNum="<<line_number;
     }
 
     if(spadNum < lastSpadNum)  //此时说明上一帧数据已经接收完毕，把整帧数据付给其他线程，供其显示，数据可以显示了
@@ -369,7 +387,7 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
     {
         colImg = i*2 + spadNum%2;                    //spad%2  0 2:第一列  1,3：第二列
         cloudIndex = rowImg*160 + colImg;           //在点云数据中的标号  0,..., 119*160+159
-        int intensity;
+        float intensity;
         float tof,rawTof,after_pileup_tof,after_offset_tof;
 
         if(isTOF == false)   //设置一个不可能的值
@@ -455,17 +473,23 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
 
 
             /************点云数据相关************/
-            Lr =  (tof*tof - (5/1.55)*(5/1.55))/(2*(tof + (5/1.55)*sin(thetaArray[cloudIndex]))) ;      //
-            Lr = Lr<0?0:Lr;
-            temp_x = tof * sin(thetaArray[cloudIndex]) *LSB;
-            temp_y = tof * cos(thetaArray[cloudIndex])*cos(betaArray[cloudIndex]) *LSB;
-            temp_z = tof * cos(thetaArray[cloudIndex])*sin(betaArray[cloudIndex]) *LSB;
-            if(tofOffsetArray[cloudIndex] ==tof)     //tof 原始值为0 处的位置会 显示成为一个弧度,所以将这里的三维点云坐标置为0
-            {
-                temp_x = 0;
-                temp_z = 0;
-                temp_y = 0;
-            }
+//            Lr =  (tof*tof - (5/1.55)*(5/1.55))/(2*(tof + (5/1.55)*sin(thetaArray[cloudIndex]))) ;      //
+//            Lr = Lr<0?0:Lr;
+//            temp_x = tof * sin(thetaArray[cloudIndex]) *LSB;
+//            temp_y = tof * cos(thetaArray[cloudIndex])*cos(betaArray[cloudIndex]) *LSB;
+//            temp_z = tof * cos(thetaArray[cloudIndex])*sin(betaArray[cloudIndex]) *LSB;
+//            if(tofOffsetArray[cloudIndex] ==tof)     //tof 原始值为0 处的位置会 显示成为一个弧度,所以将这里的三维点云坐标置为0
+//            {
+//                temp_x = 0;
+//                temp_z = 0;
+//                temp_y = 0;
+//            }
+
+            temp_y = calibration_y(tof,colImg,rowImg);
+            temp_x = calibration_x(temp_y,colImg,rowImg);
+            temp_z = calibration_z(temp_y,colImg,rowImg);
+
+
             if(intensity <peakOffset)
             {
                 temp_x = 0;
@@ -499,12 +523,16 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
             }
 
 
+
+//            qDebug()<<"cloudIndex = "<<cloudIndex;
             /***************开启自动校正**************************/
             //如果开启自动校正，则计算4个点的100帧的tof均值
             // 59*160+79=9519        59*160+80=9520   60*160+79= 9679  60*160+80=9680
             if(true == isAutoCalibration_flag)
             {
-                if(9519 == cloudIndex)
+
+//                if(9519 == cloudIndex)
+                if(9220 == cloudIndex)
                 {
                     vec_tof_1.push_back(tof);
                     if(vec_tof_1.size() == calibration_mean_num)
@@ -600,7 +628,53 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
     lastSpadNum = spadNum ;
 }
 
+//!   为提高计算的精度 ，计算过程中统一采用毫米单位  最后转换为m来进行显示
+//! \brief DealUsb_msg::calibration_y
+//! \param cal_tof  单位LSB
+//! \param x_pix    单位微米
+//! \param y_pix    单位微米
+//! \return
+//!//tof值 x_pix的位置标号  y_pix的位置标号
+float DealUsb_msg::calibration_y(float cal_tof,int x_pix,int y_pix)
+{
+    float tofLSB = cal_tof * LSB *1000;   //mm
+    float tmp1 = 4*tofLSB*tofLSB - camera_dis*camera_dis;
+    float tmp2 = 4*tofLSB*sqrt(pow(xf_position[x_pix]*miu_meter/f,2) + pow(yf_position[y_pix]*miu_meter/f,2) + 1 ) + 2*xf_position[x_pix]*miu_meter*camera_dis/f;
+    float y = tmp1/tmp2;
+    y = y/1000.0;   //mm->m
+    return y;
 
+}
+
+//!//!   为提高计算的精度 ，计算过程中统一采用毫米单位  最后转换为m来进行显示
+//! \brief DealUsb_msg::calibration_x
+//! \param cal_y
+//! \param x_pix
+//! \param y_pix
+//! \return
+//! //计算后的y的值  x_pix的位置标号  y_pix的位置标号
+float DealUsb_msg::calibration_x(float cal_y,int x_pix,int y_pix)
+{
+    cal_y = cal_y*1000;   //m->mm
+    float x = -1 * cal_y * xf_position[x_pix]*miu_meter/f;
+    x = x/1000.0;      //mm->m
+    return x;
+}
+
+//! //!   为提高计算的精度 ，计算过程中统一采用毫米单位  最后转换为m来进行显示
+//! \brief DealUsb_msg::calibration_z
+//! \param cal_y
+//! \param x_pix
+//! \param y_pix
+//! \return
+//!  //计算后的z的值  x_pix的位置标号  y_pix的位置标号
+float DealUsb_msg::calibration_z(float cal_y,int x_pix,int y_pix)
+{
+    cal_y = cal_y*1000;
+    float z = -1 * cal_y *yf_position[y_pix]*miu_meter/f;
+    z = z/1000.0;      //mm->m
+    return z;
+}
 
 //!
 //! \brief DealUsb_msg::pileUp_calibration
@@ -608,112 +682,32 @@ void DealUsb_msg::recvMsgSlot(QByteArray array)
 //! \param peak
 //! \return
 //!利用Peak值线性外插法可得对应校正量ΔTOF (Unit: mm)
-float DealUsb_msg::pileUp_calibration(int srcTof,int peak)
+float DealUsb_msg::pileUp_calibration(int srcTof,float peak)
 {
-    //    peak_cal = [0,	  	31,		50,		63,		72,		78,	     84,		90,	    92,		 94,	 96,	120];
-    //    bias_cal = [0,	 36.19,    72.88,  106.2,  134.8,   158.6,   191,       234,    256,     285,    318,   318];
-
+    float cal[] = {0,15,31,50,  63  ,72,    77.7,    84, 89.7,  92,  94.4, 96.3,  120};
+    float val[] = {0,14,36.19,72.88,106.2, 134.8,  158.6, 191, 234,  256,  285,   318,318};
+    float begin_tof,end_tof,offset_start,offset_end;
     float resTof = 0;
     float bias_tof = 0;
-    float begin_tof,end_tof,offset_start,offset_end;
 
-    if(peak<=31)           //[0 31] [0/31 36.19/31]
+//    qDebug()<<"len = "<<sizeof(cal)/sizeof(cal[0]);
+    int len = sizeof(cal)/sizeof(cal[0]);
+    for(int i=0; i<len-1; i++)
     {
-        begin_tof = 0;
-        end_tof = 31;
-        offset_start = 0;
-        offset_end = 36.19/31.0;
-        bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
-        resTof = srcTof + bias_tof;
-        return resTof;
-    }else if(peak<=50)    //(31 50] (36.19/31 72.88/31]
-    {
-        begin_tof = 31;
-        end_tof = 50;
-        offset_start = 36.19/31.0;
-        offset_end = 72.88/31.0;
-        bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
-        resTof = srcTof + bias_tof;
-        return resTof;
-    }else if(peak<=63)   //(50,63] (72.88/31 106.2/31]
-    {
-        begin_tof = 50;
-        end_tof = 63;
-        offset_start = 72.88/31.0;
-        offset_end = 106.2/31.0;
-        bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
-        resTof = srcTof + bias_tof;
-        return resTof;
-    }else if(peak<=72)   //(63,72] (106.2/31,134.8/31]
-    {
-        begin_tof = 63;
-        end_tof = 72;
-        offset_start = 106.2/31.0;
-        offset_end = 134.8/31.0;
-        bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
-        resTof = srcTof + bias_tof;
-        return resTof;
-    }else if(peak<=78)   //(72,78] (134.8/31,158.6/31]
-    {
-        begin_tof = 72;
-        end_tof = 78;
-        offset_start = 134.8/31.0;
-        offset_end = 158.6/31.0;
-        bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
-        resTof = srcTof + bias_tof;
-        return resTof;
-    }else if(peak<=84)  //(78,84] (158.6/31,191.0/31]
-    {
-        begin_tof = 78;
-        end_tof = 84;
-        offset_start = 158.6/31.0;
-        offset_end = 191.0/31.0;
-        bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
-        resTof = srcTof + bias_tof;
-        return resTof;
-    }else if(peak<=90)  //(84,90] (191.0/31,234.0/31]
-    {
-        begin_tof = 84;
-        end_tof = 90;
-        offset_start = 191.0/31.0;
-        offset_end = 234.0/31.0;
-        bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
-        resTof = srcTof + bias_tof;
-        return resTof;
-    }else if(peak<=92)  //(90,92] (234/31, 256/31)
-    {
-        begin_tof = 90;
-        end_tof = 92;
-        offset_start = 234.0/31.0;
-        offset_end = 256.0/31.0;
-        bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
-        resTof = srcTof + bias_tof;
-        return resTof;
-    }else if(peak<=94)  //(92,94] (256/31, 285/31)
-    {
-        begin_tof = 92;
-        end_tof = 94;
-        offset_start = 256.0/31.0;
-        offset_end = 285.0/31.0;
-        bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
-        resTof = srcTof + bias_tof;
-        return resTof;
-    }else if(peak<=96) //(94,96] (285/31,318/31)
-    {
-        begin_tof = 94;
-        end_tof = 96;
-        offset_start = 285.0/31.0;
-        offset_end = 318.0/31.0;
-        bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
-        resTof = srcTof + bias_tof;
-        return resTof;
+        if(peak>=cal[i] && peak<cal[i+1])
+        {
+            begin_tof = cal[i];
+            end_tof = cal[1+i];
+            offset_start = val[i]/31.0;
+            offset_end = val[1+i]/31.0;
+            bias_tof = (peak-begin_tof)*(offset_end-offset_start)/(end_tof-begin_tof) + offset_start;
+            resTof = srcTof + bias_tof;
+//            qDebug()<<"resTof = "<<resTof;
+            return  resTof;
+        }
     }
-    else if(peak>96)   //>96   bias = 318
-    {
-        bias_tof = 318.0/31.0;
-        resTof = srcTof + bias_tof;
-        return resTof;
-    }
+    return srcTof + val[len-1]/31.0;
+
 }
 
 
@@ -750,39 +744,68 @@ void  DealUsb_msg::start_autoCalibration_slot(int meters)
 //!
 //!
 //! 59*160+79=9519        59*160+80=9520   60*160+79= 9679  60*160+80=9680
-//! temp_y = Lr *  cos(thetaArray[cloudIndex]) * cos(betaArray[cloudIndex]) * LSB;      // y坐标值
-//! resTof = Lr +/-  sqrt(a^2 + Lr^2 + 2*a*b*sin0)
+
+
+//  x = realTof*LSB*1000
+//! y = calibration_real_dis *1000
+//! a = camera_dis
+//! M = xf*miu_meter/f
+//! N = yf*miu_meter/f
+//!
+//! tmp1 = sqrt((pow(a,2) + 2*a*M*y + pow(y,2)*(M*M+N*N+1))/4)
+//! tmp2 = y*sqrt(M*M+N*N+1)/2.0
+//!
+//! x = tmp2 + tmp1   ||  x= tmp2-tmp1
+//!
+//! 经过测试 tmp2<tmp1  所以最终结论是 x= tmp2+tmp1
 void DealUsb_msg::calibrate_offset_slot(int index,float mean_tof)
 {
 
+    qDebug()<<"DealUsb_msg::calibrate_offset_slot(int index,float mean_tof)";
 
-    if(9519 == index)
+    float y = calibration_real_dis *1000;
+    float a = camera_dis;
+    if(9519 == index)     //xf :79  yf:59
     {
         resTof_1 = mean_tof;
-        float back_lr = calibration_real_dis/(cos(thetaArray[index]) * cos(betaArray[index]) * LSB);
-        float a = 5.0/1.55;
-        realTof_1 = back_lr + sqrt(a*a + back_lr*back_lr + 2*a*back_lr*sin(thetaArray[index]));
+
+        float M = xf_position[79]*miu_meter/f;
+        float N = yf_position[59]*miu_meter/f;
+        float tmp1 = sqrt(  pow(a,2) + 2*a*M*y +pow(y,2)*(M*M+N*N+1)   ) / 2.0;
+        float tmp2 = y * sqrt(M*M+ N*N + 1) / 2.0;
+        float x = tmp2 + tmp1;
+        realTof_1 = x/LSB/1000;
+
     }
-    if(9520 == index)
+    if(9520 == index)   //xf:80  yf:59
     {
         resTof_2 = mean_tof;
-        float back_lr = calibration_real_dis/(cos(thetaArray[index]) * cos(betaArray[index]) * LSB);
-        float a = 5.0/1.55;
-        realTof_2 = back_lr + sqrt(a*a + back_lr*back_lr + 2*a*back_lr*sin(thetaArray[index]));
+        float M = xf_position[80]*miu_meter/f;
+        float N = yf_position[59]*miu_meter/f;
+        float tmp1 = sqrt(  pow(a,2) + 2*a*M*y +pow(y,2)*(M*M+N*N+1)   ) / 2.0;
+        float tmp2 = y * sqrt(M*M+ N*N + 1) / 2.0;
+        float x = tmp2 + tmp1;
+        realTof_2 = x/LSB/1000;
     }
-    if(9679 == index)
+    if(9679 == index)   //xf:79  yf:60
     {
         resTof_3 = mean_tof;
-        float back_lr = calibration_real_dis/(cos(thetaArray[index]) * cos(betaArray[index]) * LSB);
-        float a = 5.0/1.55;
-        realTof_3 = back_lr + sqrt(a*a + back_lr*back_lr + 2*a*back_lr*sin(thetaArray[index]));
+        float M = xf_position[79]*miu_meter/f;
+        float N = yf_position[60]*miu_meter/f;
+        float tmp1 = sqrt(  pow(a,2) + 2*a*M*y +pow(y,2)*(M*M+N*N+1)   ) / 2.0;
+        float tmp2 = y * sqrt(M*M+ N*N + 1) / 2.0;
+        float x = tmp2 + tmp1;
+        realTof_3 = x/LSB/1000;
     }
-    if(9680 == index)
+    if(9680 == index)   //xf:80   yf:60
     {
         resTof_4 = mean_tof;
-        float back_lr = calibration_real_dis/(cos(thetaArray[index]) * cos(betaArray[index]) * LSB);
-        float a = 5.0/1.55;
-        realTof_4 = back_lr + sqrt(a*a + back_lr*back_lr + 2*a*back_lr*sin(thetaArray[index]));
+        float M = xf_position[80]*miu_meter/f;
+        float N = yf_position[60]*miu_meter/f;
+        float tmp1 = sqrt(  pow(a,2) + 2*a*M*y +pow(y,2)*(M*M+N*N+1)   ) / 2.0;
+        float tmp2 = y * sqrt(M*M+ N*N + 1) / 2.0;
+        float x = tmp2 + tmp1;
+        realTof_4 = x/LSB/1000;
     }
 
 
@@ -939,9 +962,13 @@ void DealUsb_msg::readLocalPCDFile()
             //            temp_y = tof * y_Weight[cloudIndex] * LSB;
             //            temp_z = tof * z_Weight[cloudIndex] * LSB;
 
-            temp_x = tof * sin(thetaArray[cloudIndex]) *LSB;
-            temp_y = tof * cos(thetaArray[cloudIndex])*cos(betaArray[cloudIndex]) *LSB;
-            temp_z = tof * cos(thetaArray[cloudIndex])*sin(betaArray[cloudIndex]) *LSB;
+//            temp_x = tof * sin(thetaArray[cloudIndex]) *LSB;
+//            temp_y = tof * cos(thetaArray[cloudIndex])*cos(betaArray[cloudIndex]) *LSB;
+//            temp_z = tof * cos(thetaArray[cloudIndex])*sin(betaArray[cloudIndex]) *LSB;
+
+            temp_y = calibration_y(tof,imgRow,imgCol);
+            temp_x = calibration_x(temp_y,imgRow,imgCol);
+            temp_z = calibration_z(temp_y,imgRow,imgCol);
 
             QColor mColor = QColor(tofColor);
             r = mColor.red();

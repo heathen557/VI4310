@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1287</width>
-    <height>713</height>
+    <height>760</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -349,7 +349,7 @@
           <x>0</x>
           <y>0</y>
           <width>300</width>
-          <height>422</height>
+          <height>480</height>
          </rect>
         </property>
         <attribute name="label">
@@ -386,6 +386,12 @@
               <string>设备链接：</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_8">
+              <property name="topMargin">
+               <number>2</number>
+              </property>
+              <property name="bottomMargin">
+               <number>2</number>
+              </property>
               <item row="0" column="0">
                <layout class="QHBoxLayout" name="horizontalLayout_4">
                 <item>
@@ -468,6 +474,12 @@
               <string>系统寄存器：</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_9">
+              <property name="topMargin">
+               <number>2</number>
+              </property>
+              <property name="bottomMargin">
+               <number>2</number>
+              </property>
               <item row="0" column="0">
                <layout class="QHBoxLayout" name="horizontalLayout_6">
                 <item>
@@ -522,6 +534,67 @@
             </widget>
            </item>
            <item>
+            <widget class="QGroupBox" name="groupBox_9">
+             <property name="title">
+              <string>设备寄存器：</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_12">
+              <property name="topMargin">
+               <number>2</number>
+              </property>
+              <property name="bottomMargin">
+               <number>2</number>
+              </property>
+              <item row="0" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <item>
+                 <widget class="QLabel" name="label_6">
+                  <property name="text">
+                   <string>地址：</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit"/>
+                </item>
+               </layout>
+              </item>
+              <item row="1" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout_14">
+                <item>
+                 <widget class="QLabel" name="label_9">
+                  <property name="text">
+                   <string>数据：</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEdit_2"/>
+                </item>
+               </layout>
+              </item>
+              <item row="2" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout_15">
+                <item>
+                 <widget class="QPushButton" name="pushButton">
+                  <property name="text">
+                   <string>读取</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_2">
+                  <property name="text">
+                   <string>写入</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="QGroupBox" name="groupBox_8">
              <property name="maximumSize">
               <size>
@@ -533,7 +606,13 @@
               <string>配置集：</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_11">
-              <item row="0" column="0">
+              <property name="topMargin">
+               <number>2</number>
+              </property>
+              <property name="bottomMargin">
+               <number>2</number>
+              </property>
+              <item row="1" column="0">
                <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
                  <widget class="QPushButton" name="loadSetting_pushButton">
@@ -584,7 +663,7 @@
           <x>0</x>
           <y>0</y>
           <width>300</width>
-          <height>422</height>
+          <height>480</height>
          </rect>
         </property>
         <attribute name="label">

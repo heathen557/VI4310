@@ -131,6 +131,10 @@ void MainWindow::init_connect()
     //数据接收 与数据处理线程
     connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal(QByteArray)),dealMsg_obj,SLOT(recvMsgSlot(QByteArray)));
 
+    //自动校正相关
+    connect(&autoCal_dia,SIGNAL(start_autoCalibration_signal(int)),dealMsg_obj,SLOT(start_autoCalibration_slot(int)));
+    connect(dealMsg_obj,SIGNAL(send_cali_success_signal(QString)),&autoCal_dia,SLOT(send_cali_success_slot(QString)));
+
 
 
 }

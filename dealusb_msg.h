@@ -58,8 +58,11 @@ public:
     /******角度矫正相关的变量******/
     float Lr;    //矩阵计算的中间变量
     float tofOffsetArray[19200];    //四个角度矫正矩阵
-    float thetaArray[19200];
-    float betaArray[19200];
+//    float thetaArray[19200];
+//    float betaArray[19200];
+    float xf_position[160];   //x方向的spad偏移
+    float yf_position[120];   //y方向的spad偏移
+
 
 
 
@@ -73,6 +76,10 @@ public:
     bool lineSelect;                   //两个微像素 是否切换  默认false;
 
     /************pileuP 以及 自动校正的相关变量 ******************/
+
+    float camera_dis;       //相机间距   about 44.63mm     单位mm
+    float f;                //焦距      about 3.5-5.7mm   单位mm
+
     bool is_pileUp_flag;          //是否进行pile_up
     int calibration_real_dis;     //用户设定的真实距离
     bool isAutoCalibration_flag;
@@ -116,12 +123,20 @@ public slots:
     void change_tof_peak_slot();          //切换tof/peak的槽函数
 
     //校正
-    float pileUp_calibration(int,int);
+    float pileUp_calibration(int,float);
 
 
     //自动校正相关
     void start_autoCalibration_slot(int meters);
     void calibrate_offset_slot(int index,float mean_tof);
+
+
+
+    //最新计算depth的方法，返回x,y,z的值
+    float calibration_y(float cal_tof,int x_pix,int y_pix);  //tof值 x_pix的位置标号  y_pix的位置标号
+    float calibration_x(float cal_y,int x_pix,int y_pix);    //计算后的y的值  x_pix的位置标号  y_pix的位置标号
+    float calibration_z(float cal_y,int x_pix,int y_pix);    //计算后的z的值  x_pix的位置标号  y_pix的位置标号
+
 
 };
 
