@@ -72,6 +72,9 @@ private slots:
 
     void on_centerShowNo_radioButton_clicked();
 
+    void recvStaticValueSlot(float tofMin,float tofMax,float peakMin,float peakMax,float xMin,float xMax,float yMin,float yMax,float zMin,float zMax);
+
+    void one_Second_timer_slot();
 
 
 
@@ -126,6 +129,9 @@ private:
 
     autoCalibration_Dialog autoCal_dia;   //自动校正的窗口
 
+    int frameCount;                   //统计帧率相关
+    QLabel fpsLabel;
+    QTimer one_Second_timer;
 
     /**********USB 连接信息相关****************/
     bool isLinkSuccess;

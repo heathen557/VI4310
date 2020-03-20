@@ -33,7 +33,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    frameCount  = 0 ;     //帧率
     isLinkSuccess = false;     //USB 连接是否成功的标识
+
+    ui->statusBar->addWidget(&fpsLabel);
+    ui->statusBar->setStyleSheet(QString("QStatusBar::item{border:0px}"));
 
 #ifndef SHOW_HISTORGRAM_BUTTON
     ui->tof_Histogram_pushButton->setVisible(false);
@@ -48,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
     init_connect();
     load_ini_file();
     dealMsg_obj->loadLocalArray();   //接收数据线程中 加载角度矩阵的矫正文件
+
+    one_Second_timer.start(1000);
 }
 
 MainWindow::~MainWindow()
@@ -98,6 +104,7 @@ void MainWindow::init_connect()
     connect(this,&MainWindow::change_gain_signal,dealMsg_obj,&DealUsb_msg::change_gain_slot);
     connect(this,&MainWindow::change_tof_peak_signal,dealMsg_obj,&DealUsb_msg::change_tof_peak_slot);
     connect(this,&MainWindow::isFilter_signal,dealMsg_obj,&DealUsb_msg::isFilter_slot);
+    connect(dealMsg_obj,&DealUsb_msg::staticValueSignal,this,&MainWindow::recvStaticValueSlot);
 
 
     //文件保存相关的信号与槽的连接
@@ -134,6 +141,10 @@ void MainWindow::init_connect()
     //自动校正相关
     connect(&autoCal_dia,SIGNAL(start_autoCalibration_signal(int)),dealMsg_obj,SLOT(start_autoCalibration_slot(int)));
     connect(dealMsg_obj,SIGNAL(send_cali_success_signal(QString)),&autoCal_dia,SLOT(send_cali_success_slot(QString)));
+
+
+    //显示帧率相关的槽函数
+    connect(&one_Second_timer,SIGNAL(timeout()),this,SLOT(one_Second_timer_slot()));
 
 
 
@@ -392,7 +403,33 @@ void MainWindow::on_centerShowNo_radioButton_clicked()
     dealMsg_obj->isOnlyCenterShow_flag = false;
 }
 
+//!
+//! \brief MainWindow::recvStaticValueSlot
+//! \param tofMin
+//! \param tofMax
+//! \param peakMin
+//! \param peakMax
+//! \param xMin
+//! \param xMax
+//! \param yMin
+//! \param yMax
+//! \param zMin
+//! \param zMax
+//!
+void MainWindow::recvStaticValueSlot(float tofMin,float tofMax,float peakMin,float peakMax,float xMin,float xMax,float yMin,float yMax,float zMin,float zMax)
+{
+   frameCount++;
+}
 
+//!
+//! \brief one_Second_timer_slot
+//! 一秒钟显示一次帧率
+void MainWindow::one_Second_timer_slot()
+{
+    QString fpsStr = "fps:" + QString::number(frameCount);
+    fpsLabel.setText(fpsStr);
+    frameCount = 0;
+}
 
 
 /********************************************  USB 配置相关的槽函数   ********************************************************************/

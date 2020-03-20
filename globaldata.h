@@ -33,6 +33,7 @@
 #include<QThread>
 #include<QSettings>
 #include<QToolTip>
+#include<QLabel>
 
 
 
