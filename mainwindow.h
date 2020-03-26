@@ -11,6 +11,7 @@
 #include"calmeanstdthread.h"
 #include"receusb_msg.h"
 #include"autocalibration_dialog.h"
+#include"aboutdialog.h"
 
 
 
@@ -62,6 +63,12 @@ private slots:
 
     void on_translate_horizontalSlider_sliderMoved(int position); //平移
 
+    void on_front_toolButton_clicked();         //正视图
+
+    void on_side_toolButton_clicked();          //侧视图
+
+    void on_down_toolButton_clicked();          //俯视图
+
     void save3DSettingFile();
 
     void on_peakOffset_lineEdit_returnPressed();
@@ -94,6 +101,11 @@ private slots:
     void USB_linkInfoSlot(int );
 
     void on_autoCalibration_action_triggered();
+
+
+    void on_about_action_triggered();
+
+    void on_pileUp_checkBox_clicked();
 
 signals:
     void change_gain_signal(float);
@@ -137,6 +149,7 @@ private:
     bool isLinkSuccess;
 
 
+    aboutDialog about_dia;
     Ui::MainWindow *ui;
 };
 

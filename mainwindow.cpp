@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     isLinkSuccess = false;     //USB 连接是否成功的标识
 
     ui->statusBar->addWidget(&fpsLabel);
-    ui->statusBar->setStyleSheet(QString("QStatusBar::item{border:0px}"));
+//    ui->statusBar->setStyleSheet(QString("QStatusBar::item{border:0px}"));
 
 #ifndef SHOW_HISTORGRAM_BUTTON
     ui->tof_Histogram_pushButton->setVisible(false);
@@ -134,7 +134,6 @@ void MainWindow::init_connect()
     connect(this,&MainWindow::loadSettingSignal,recvUsbMsg_obj,&ReceUSB_Msg::loadSettingSlot);
     connect(this,&MainWindow::start_read_usb_signal,recvUsbMsg_obj,&ReceUSB_Msg::read_usb);
 
-
     //数据接收 与数据处理线程
     connect(recvUsbMsg_obj,SIGNAL(recvMsgSignal(QByteArray)),dealMsg_obj,SLOT(recvMsgSlot(QByteArray)));
 
@@ -142,12 +141,8 @@ void MainWindow::init_connect()
     connect(&autoCal_dia,SIGNAL(start_autoCalibration_signal(int)),dealMsg_obj,SLOT(start_autoCalibration_slot(int)));
     connect(dealMsg_obj,SIGNAL(send_cali_success_signal(QString)),&autoCal_dia,SLOT(send_cali_success_slot(QString)));
 
-
     //显示帧率相关的槽函数
     connect(&one_Second_timer,SIGNAL(timeout()),this,SLOT(one_Second_timer_slot()));
-
-
-
 }
 
 //!
@@ -379,6 +374,33 @@ void MainWindow::save3DSettingFile()
     configSetting.setValue("operation/transtate_rate",translateRate);
 
 }
+
+//!
+//! \brief MainWindow::on_front_toolButton_clicked
+//!设置正视图的视角
+void MainWindow::on_front_toolButton_clicked()
+{
+    ui->widget->frontView_slot();
+}
+
+//!
+//! \brief MainWindow::on_side_toolButton_clicked
+//!侧视图视角
+void MainWindow::on_side_toolButton_clicked()
+{
+    ui->widget->endView_slot();
+}
+
+//!
+//! \brief MainWindow::on_down_toolButton_clicked
+//!俯视图视角
+void MainWindow::on_down_toolButton_clicked()
+{
+    ui->widget->verticalView_slot();
+}
+
+
+
 
 //显示  peak的阈值
 void MainWindow::on_peakOffset_lineEdit_returnPressed()
@@ -615,3 +637,23 @@ void MainWindow::on_autoCalibration_action_triggered()
     autoCal_dia.setModal(true);
     autoCal_dia.show();
 }
+
+//!
+//! \brief MainWindow::on_pileUp_checkBox_clicked
+//! pileUp 标识
+void MainWindow::on_pileUp_checkBox_clicked()
+{
+    bool  flag = ui->pileUp_checkBox->isChecked();
+    dealMsg_obj->is_pileUp_flag = flag;
+
+
+    qDebug()<<"flag = "<<flag;
+}
+
+
+void MainWindow::on_about_action_triggered()
+{
+    about_dia.show();
+}
+
+

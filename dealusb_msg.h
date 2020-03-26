@@ -10,62 +10,40 @@ class DealUsb_msg : public QObject
     Q_OBJECT
 public:
     explicit DealUsb_msg(QObject *parent = 0);
-
     QByteArray recvArray;
-    float gainImage;   //增益
-    bool isTOF;  /***tof/peak 切换标识****/
-    bool isFilterFlag;    //是否进行滤波的标识
-
-    int lastSpadNum;     //上一帧的spadNum
-    int lastLineNum;     //上一帧的lineNum
-
+    float gainImage;        //增益
+    bool isTOF;             /***tof/peak 切换标识****/
+    bool isFilterFlag;     //是否进行滤波的标识
+    int lastSpadNum;       //上一帧的spadNum
+    int lastLineNum;       //上一帧的lineNum
     QImage microQimage;
     QImage macroQimage;
-
     pcl::PointCloud<pcl::PointXYZRGB> tempRgbCloud;
     pcl::PointCloud<pcl::PointXYZRGB> tempRgbCloud_pass;
     pcl::PointCloud<pcl::PointXYZRGB> tempRgbCloud_radius;
-//    pcl::PointXYZRGB  cloutPoint;    //不再使用push_back的方式了，因为要考虑有序的方式
-
     int cloudIndex;         //点云的序号
-
-    float  LSB ;          //时钟频率
-
+    float  LSB ;           //时钟频率
     float tofMin,tofMax,peakMin,peakMax,xMin,xMax,yMin,yMax,zMin,zMax;
     float temp_x,temp_y,temp_z;
-
     int r,g,b,rgb;
-
     QString tofPeakToSave_string;   //存储文件所需的tof和peak;
     QString tofPeakNum[19200];     //两者配合使用
 
 
     /*******统计 均值、方差相关的变量******************/
     bool statisticStartFlag;
-//    int statisticIndex;
     int statisticFrameNumber;
     vector<vector<int>> tempStatisticTofPoints;   //用于统计 均值和方差的 容器
     vector<vector<int>> tempStatisticPeakPoints;   //用于统计 均值和方差的 容器
-
-
     //读取本地文件相关的
     QString filePath;
     QTimer *localFile_timer;
     int fileIndex;
-
-
-
     /******角度矫正相关的变量******/
     float Lr;    //矩阵计算的中间变量
     float tofOffsetArray[19200];    //四个角度矫正矩阵
-//    float thetaArray[19200];
-//    float betaArray[19200];
     float xf_position[160];   //x方向的spad偏移
     float yf_position[120];   //y方向的spad偏移
-
-
-
-
     /******** 利用peak值进行滤波的相关变量****************/
     int peakOffset;                     //设置为阈值，小于这个值的认为是无效数据，将tof值设置为0,程序设置的此值的默认值为0
     float lastTOF[100][19200];         //存储上一帧的TOF值，然后此值和当前值做平均得出 现在的TOF值   ，取平均值的时候用  ,暂时取五帧
@@ -74,12 +52,9 @@ public:
     bool isOnlyCenterShow_flag;         //是否只显示中心区域的标识，设置为true则只显示中心光较强的区域（超过范围的点xyz坐标全部设置为0），设置为false则显示全部点云数据；默认false
     int averageNum;                       //滑动平均的帧数 , 默认为1
     bool lineSelect;                   //两个微像素 是否切换  默认false;
-
     /************pileuP 以及 自动校正的相关变量 ******************/
-
     float camera_dis;       //相机间距   about 44.63mm     单位mm
     float f;                //焦距      about 3.5-5.7mm   单位mm
-
     bool is_pileUp_flag;          //是否进行pile_up
     int calibration_real_dis;     //用户设定的真实距离
     bool isAutoCalibration_flag;
@@ -95,43 +70,26 @@ public:
 
 signals:
     void staticValueSignal(float,float,float,float,float,float,float,float,float,float);
-
     void savePCDSignal(pcl::PointCloud<pcl::PointXYZRGB>,int);    // int 0:二进制  1：ASCII
-
     void saveTXTSignal(QString );             //保存tof/peak的值
-
     void Display_log_signal(QString str);      //打印运行信息的信号 ，发送信息到主线程
-
     void send_cali_success_signal(QString);
 
 public slots:
 
     void loadLocalArray();                        //加载本地角度矫正矩阵
-
     void recvMsgSlot(QByteArray array);         //接收3d数据的
-
     void isFilter_slot(bool isFiter);          //接收是否进行滤波的槽函数
-
     void alterStatisticFrameNum_slot(int num); //修改统计帧数的槽函数
-
     void readLocalPCDFile();                   //添加读取本地tof和PEAK的槽函数
-
     void playLocalFile_slot(QString sPath);  //选取本地文件
-
     void change_gain_slot(float);         //增益的改变的槽函数
-
     void change_tof_peak_slot();          //切换tof/peak的槽函数
-
     //校正
     float pileUp_calibration(int,float);
-
-
     //自动校正相关
     void start_autoCalibration_slot(int meters);
     void calibrate_offset_slot(int index,float mean_tof);
-
-
-
     //最新计算depth的方法，返回x,y,z的值
     float calibration_y(float cal_tof,int x_pix,int y_pix);  //tof值 x_pix的位置标号  y_pix的位置标号
     float calibration_x(float cal_y,int x_pix,int y_pix);    //计算后的y的值  x_pix的位置标号  y_pix的位置标号

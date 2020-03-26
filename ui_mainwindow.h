@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDockWidget>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
@@ -46,6 +47,7 @@ public:
     QAction *saveFile_action;
     QAction *statistic_action;
     QAction *autoCalibration_action;
+    QAction *about_action;
     QWidget *centralWidget;
     QGridLayout *gridLayout_5;
     QGroupBox *groupBox;
@@ -53,6 +55,7 @@ public:
     GLWidget *widget;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
+    QCheckBox *pileUp_checkBox;
     QToolButton *tof_peak_change_toolButton;
     QLabel *label;
     QLineEdit *gain_lineEdit;
@@ -65,6 +68,7 @@ public:
     QMenu *menu;
     QMenu *menu_2;
     QMenu *menu_3;
+    QMenu *menu_4;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
     QDockWidget *left_dockWidget;
@@ -114,17 +118,6 @@ public:
     QHBoxLayout *horizontalLayout_11;
     QPushButton *readSys_pushButton;
     QPushButton *writeSys_pushButton;
-    QGroupBox *groupBox_9;
-    QGridLayout *gridLayout_12;
-    QHBoxLayout *horizontalLayout_12;
-    QLabel *label_6;
-    QLineEdit *lineEdit;
-    QHBoxLayout *horizontalLayout_14;
-    QLabel *label_9;
-    QLineEdit *lineEdit_2;
-    QHBoxLayout *horizontalLayout_15;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
     QGroupBox *groupBox_8;
     QGridLayout *gridLayout_11;
     QVBoxLayout *verticalLayout_2;
@@ -162,9 +155,9 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(1287, 760);
+        MainWindow->resize(1287, 710);
         QIcon icon;
-        icon.addFile(QStringLiteral("images/icon_1.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QStringLiteral("icon_1.png"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
         openFile_action = new QAction(MainWindow);
         openFile_action->setObjectName(QStringLiteral("openFile_action"));
@@ -186,6 +179,11 @@ public:
         QIcon icon4;
         icon4.addFile(QStringLiteral(":/new/prefix1/images/ccPivotAuto.png"), QSize(), QIcon::Normal, QIcon::Off);
         autoCalibration_action->setIcon(icon4);
+        about_action = new QAction(MainWindow);
+        about_action->setObjectName(QStringLiteral("about_action"));
+        QIcon icon5;
+        icon5.addFile(QStringLiteral(":/new/prefix1/images/dbViewportSymbol.png"), QSize(), QIcon::Normal, QIcon::Off);
+        about_action->setIcon(icon5);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout_5 = new QGridLayout(centralWidget);
@@ -212,6 +210,12 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer);
 
+        pileUp_checkBox = new QCheckBox(groupBox);
+        pileUp_checkBox->setObjectName(QStringLiteral("pileUp_checkBox"));
+        pileUp_checkBox->setChecked(true);
+
+        horizontalLayout->addWidget(pileUp_checkBox);
+
         tof_peak_change_toolButton = new QToolButton(groupBox);
         tof_peak_change_toolButton->setObjectName(QStringLiteral("tof_peak_change_toolButton"));
 
@@ -229,25 +233,25 @@ public:
 
         front_toolButton = new QToolButton(groupBox);
         front_toolButton->setObjectName(QStringLiteral("front_toolButton"));
-        QIcon icon5;
-        icon5.addFile(QStringLiteral("images/ccViewYpos.png"), QSize(), QIcon::Normal, QIcon::Off);
-        front_toolButton->setIcon(icon5);
+        QIcon icon6;
+        icon6.addFile(QStringLiteral("images/ccViewYpos.png"), QSize(), QIcon::Normal, QIcon::Off);
+        front_toolButton->setIcon(icon6);
 
         horizontalLayout->addWidget(front_toolButton);
 
         side_toolButton = new QToolButton(groupBox);
         side_toolButton->setObjectName(QStringLiteral("side_toolButton"));
-        QIcon icon6;
-        icon6.addFile(QStringLiteral("images/ccViewXneg.png"), QSize(), QIcon::Normal, QIcon::Off);
-        side_toolButton->setIcon(icon6);
+        QIcon icon7;
+        icon7.addFile(QStringLiteral("images/ccViewXneg.png"), QSize(), QIcon::Normal, QIcon::Off);
+        side_toolButton->setIcon(icon7);
 
         horizontalLayout->addWidget(side_toolButton);
 
         down_toolButton = new QToolButton(groupBox);
         down_toolButton->setObjectName(QStringLiteral("down_toolButton"));
-        QIcon icon7;
-        icon7.addFile(QStringLiteral("images/ccViewZpos.png"), QSize(), QIcon::Normal, QIcon::Off);
-        down_toolButton->setIcon(icon7);
+        QIcon icon8;
+        icon8.addFile(QStringLiteral("images/ccViewZpos.png"), QSize(), QIcon::Normal, QIcon::Off);
+        down_toolButton->setIcon(icon8);
 
         horizontalLayout->addWidget(down_toolButton);
 
@@ -261,13 +265,13 @@ public:
         horizontalLayout->addItem(horizontalSpacer_2);
 
         horizontalLayout->setStretch(0, 5);
-        horizontalLayout->setStretch(2, 1);
         horizontalLayout->setStretch(3, 1);
         horizontalLayout->setStretch(4, 1);
         horizontalLayout->setStretch(5, 1);
         horizontalLayout->setStretch(6, 1);
         horizontalLayout->setStretch(7, 1);
-        horizontalLayout->setStretch(8, 5);
+        horizontalLayout->setStretch(8, 1);
+        horizontalLayout->setStretch(9, 5);
 
         gridLayout->addLayout(horizontalLayout, 1, 0, 1, 1);
 
@@ -286,6 +290,8 @@ public:
         menu_2->setObjectName(QStringLiteral("menu_2"));
         menu_3 = new QMenu(menuBar);
         menu_3->setObjectName(QStringLiteral("menu_3"));
+        menu_4 = new QMenu(menuBar);
+        menu_4->setObjectName(QStringLiteral("menu_4"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -318,9 +324,9 @@ public:
 
         tof_Histogram_pushButton = new QPushButton(groupBox_2);
         tof_Histogram_pushButton->setObjectName(QStringLiteral("tof_Histogram_pushButton"));
-        QIcon icon8;
-        icon8.addFile(QStringLiteral("images/ccHistogram.png"), QSize(), QIcon::Normal, QIcon::Off);
-        tof_Histogram_pushButton->setIcon(icon8);
+        QIcon icon9;
+        icon9.addFile(QStringLiteral("images/ccHistogram.png"), QSize(), QIcon::Normal, QIcon::Off);
+        tof_Histogram_pushButton->setIcon(icon9);
 
         horizontalLayout_2->addWidget(tof_Histogram_pushButton);
 
@@ -365,7 +371,7 @@ public:
 
         peak_Histogram_pushButton = new QPushButton(groupBox_3);
         peak_Histogram_pushButton->setObjectName(QStringLiteral("peak_Histogram_pushButton"));
-        peak_Histogram_pushButton->setIcon(icon8);
+        peak_Histogram_pushButton->setIcon(icon9);
 
         horizontalLayout_3->addWidget(peak_Histogram_pushButton);
 
@@ -396,7 +402,7 @@ public:
         config_toolBox->setMinimumSize(QSize(300, 0));
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
-        page->setGeometry(QRect(0, 0, 300, 480));
+        page->setGeometry(QRect(0, 0, 300, 430));
         gridLayout_10 = new QGridLayout(page);
         gridLayout_10->setSpacing(6);
         gridLayout_10->setContentsMargins(11, 11, 11, 11);
@@ -529,64 +535,6 @@ public:
 
         verticalLayout->addWidget(groupBox_7);
 
-        groupBox_9 = new QGroupBox(page);
-        groupBox_9->setObjectName(QStringLiteral("groupBox_9"));
-        gridLayout_12 = new QGridLayout(groupBox_9);
-        gridLayout_12->setSpacing(6);
-        gridLayout_12->setContentsMargins(11, 11, 11, 11);
-        gridLayout_12->setObjectName(QStringLiteral("gridLayout_12"));
-        gridLayout_12->setContentsMargins(-1, 2, -1, 2);
-        horizontalLayout_12 = new QHBoxLayout();
-        horizontalLayout_12->setSpacing(6);
-        horizontalLayout_12->setObjectName(QStringLiteral("horizontalLayout_12"));
-        label_6 = new QLabel(groupBox_9);
-        label_6->setObjectName(QStringLiteral("label_6"));
-
-        horizontalLayout_12->addWidget(label_6);
-
-        lineEdit = new QLineEdit(groupBox_9);
-        lineEdit->setObjectName(QStringLiteral("lineEdit"));
-
-        horizontalLayout_12->addWidget(lineEdit);
-
-
-        gridLayout_12->addLayout(horizontalLayout_12, 0, 0, 1, 1);
-
-        horizontalLayout_14 = new QHBoxLayout();
-        horizontalLayout_14->setSpacing(6);
-        horizontalLayout_14->setObjectName(QStringLiteral("horizontalLayout_14"));
-        label_9 = new QLabel(groupBox_9);
-        label_9->setObjectName(QStringLiteral("label_9"));
-
-        horizontalLayout_14->addWidget(label_9);
-
-        lineEdit_2 = new QLineEdit(groupBox_9);
-        lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
-
-        horizontalLayout_14->addWidget(lineEdit_2);
-
-
-        gridLayout_12->addLayout(horizontalLayout_14, 1, 0, 1, 1);
-
-        horizontalLayout_15 = new QHBoxLayout();
-        horizontalLayout_15->setSpacing(6);
-        horizontalLayout_15->setObjectName(QStringLiteral("horizontalLayout_15"));
-        pushButton = new QPushButton(groupBox_9);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-
-        horizontalLayout_15->addWidget(pushButton);
-
-        pushButton_2 = new QPushButton(groupBox_9);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-
-        horizontalLayout_15->addWidget(pushButton_2);
-
-
-        gridLayout_12->addLayout(horizontalLayout_15, 2, 0, 1, 1);
-
-
-        verticalLayout->addWidget(groupBox_9);
-
         groupBox_8 = new QGroupBox(page);
         groupBox_8->setObjectName(QStringLiteral("groupBox_8"));
         groupBox_8->setMaximumSize(QSize(16777215, 1677512));
@@ -632,7 +580,7 @@ public:
         config_toolBox->addItem(page, QString::fromUtf8("\345\237\272\346\234\254\350\256\276\347\275\256"));
         page_2 = new QWidget();
         page_2->setObjectName(QStringLiteral("page_2"));
-        page_2->setGeometry(QRect(0, 0, 300, 480));
+        page_2->setGeometry(QRect(0, 0, 300, 430));
         groupBox_4 = new QGroupBox(page_2);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
         groupBox_4->setGeometry(QRect(40, 20, 220, 141));
@@ -768,10 +716,12 @@ public:
         menuBar->addAction(menu->menuAction());
         menuBar->addAction(menu_2->menuAction());
         menuBar->addAction(menu_3->menuAction());
+        menuBar->addAction(menu_4->menuAction());
         menu->addAction(openFile_action);
         menu->addAction(saveFile_action);
         menu_2->addAction(statistic_action);
         menu_3->addAction(autoCalibration_action);
+        menu_4->addAction(about_action);
         mainToolBar->addAction(openFile_action);
         mainToolBar->addAction(saveFile_action);
         mainToolBar->addAction(statistic_action);
@@ -787,12 +737,14 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "VI4310_Demo(v0.1)", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "VI4310_Demo(v1.1)", Q_NULLPTR));
         openFile_action->setText(QApplication::translate("MainWindow", "\346\211\223\345\274\200\346\234\254\345\234\260\346\226\207\344\273\266", Q_NULLPTR));
         saveFile_action->setText(QApplication::translate("MainWindow", "\344\277\235\345\255\230\346\226\207\344\273\266", Q_NULLPTR));
         statistic_action->setText(QApplication::translate("MainWindow", "\347\273\237\350\256\241\344\277\241\346\201\257", Q_NULLPTR));
         autoCalibration_action->setText(QApplication::translate("MainWindow", "\347\233\270\346\234\272\346\240\241\346\255\243", Q_NULLPTR));
+        about_action->setText(QApplication::translate("MainWindow", "\345\205\263\344\272\216", Q_NULLPTR));
         groupBox->setTitle(QApplication::translate("MainWindow", "3D\347\202\271\344\272\221\357\274\232", Q_NULLPTR));
+        pileUp_checkBox->setText(QApplication::translate("MainWindow", "pileUp", Q_NULLPTR));
         tof_peak_change_toolButton->setText(QApplication::translate("MainWindow", "tof/peak", Q_NULLPTR));
         label->setText(QApplication::translate("MainWindow", "\345\242\236\347\233\212\357\274\232", Q_NULLPTR));
         gain_lineEdit->setText(QApplication::translate("MainWindow", "1", Q_NULLPTR));
@@ -803,6 +755,7 @@ public:
         menu->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266", Q_NULLPTR));
         menu_2->setTitle(QApplication::translate("MainWindow", "\350\260\203\350\257\225", Q_NULLPTR));
         menu_3->setTitle(QApplication::translate("MainWindow", "\350\256\276\347\275\256", Q_NULLPTR));
+        menu_4->setTitle(QApplication::translate("MainWindow", "\345\270\256\345\212\251", Q_NULLPTR));
         groupBox_2->setTitle(QApplication::translate("MainWindow", "\346\267\261\345\272\246\345\233\276(tof)\357\274\232", Q_NULLPTR));
         tof_Histogram_pushButton->setText(QApplication::translate("MainWindow", "\347\233\264\346\226\271\345\233\276", Q_NULLPTR));
         tof_label->setText(QString());
@@ -821,11 +774,6 @@ public:
         label_5->setText(QApplication::translate("MainWindow", "\346\225\260\346\215\256\357\274\232", Q_NULLPTR));
         readSys_pushButton->setText(QApplication::translate("MainWindow", "\350\257\273\345\217\226", Q_NULLPTR));
         writeSys_pushButton->setText(QApplication::translate("MainWindow", "\345\206\231\345\205\245", Q_NULLPTR));
-        groupBox_9->setTitle(QApplication::translate("MainWindow", "\350\256\276\345\244\207\345\257\204\345\255\230\345\231\250\357\274\232", Q_NULLPTR));
-        label_6->setText(QApplication::translate("MainWindow", "\345\234\260\345\235\200\357\274\232", Q_NULLPTR));
-        label_9->setText(QApplication::translate("MainWindow", "\346\225\260\346\215\256\357\274\232", Q_NULLPTR));
-        pushButton->setText(QApplication::translate("MainWindow", "\350\257\273\345\217\226", Q_NULLPTR));
-        pushButton_2->setText(QApplication::translate("MainWindow", "\345\206\231\345\205\245", Q_NULLPTR));
         groupBox_8->setTitle(QApplication::translate("MainWindow", "\351\205\215\347\275\256\351\233\206\357\274\232", Q_NULLPTR));
         loadSetting_pushButton->setText(QApplication::translate("MainWindow", "\345\212\240\350\275\275\351\205\215\347\275\256\351\233\206", Q_NULLPTR));
         saveSetting_pushButton->setText(QApplication::translate("MainWindow", "\344\277\235\345\255\230\351\205\215\347\275\256\351\233\206", Q_NULLPTR));

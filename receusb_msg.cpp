@@ -317,51 +317,17 @@ void ReceUSB_Msg::read_usb()
     {
 //        ret = usb_interrupt_read(devHandle,129,MyBuffer,sizeof(MyBuffer),3000);
         ret = usb_bulk_read(devHandle, 129, MyBuffer, sizeof(MyBuffer), 3000);       //此处延迟设置为3000，经过测试设置为1的时候，ret<0,程序报错退出
-
-        if (ret < 0) {
-            qDebug("**************************************************error reading:%s", usb_strerror());
-            emit linkInfoSignal(2);  //  2:没有接收到数据
-            QString log_str="[Receive USB data failed!]";
-            emit Display_log_signal(log_str);
-
-            break;
-        }
-
         if(324 == ret)     //4 + 320个字节   包含80个点的数据
         {
             mArray = QByteArray(MyBuffer,ret);
             emit recvMsgSignal(mArray);
-        }else if(ret <260)
-        {
-//            mArray = QByteArray(MyBuffer,ret);
-
-//            if(4 == ret && 0 == tmpArray.size())
-//            {
-//                tmpArray.append(mArray);
-//            }
-//            if(256 == ret && 4 == tmpArray.size())
-//            {
-//                tmpArray.append(mArray);
-//                emit recvMsgSignal(tmpArray);
-//                tmpArray.clear();
-//            }
-
-
-            mArray = QByteArray(MyBuffer,ret);
-            if(4 == ret)
-            {
-                tmpArray.clear();
-                tmpArray.append(mArray);
-            }
-            if(256 == ret && 4 == tmpArray.size())
-            {
-                tmpArray.append(mArray);
-                emit recvMsgSignal(tmpArray);
-                tmpArray.clear();
-            }
-
+        }else if (ret < 0) {
+            qDebug("**************************************************error reading:%s", usb_strerror());
+            emit linkInfoSignal(2);  //  2:没有接收到数据
+            QString log_str="[Receive USB data failed!]";
+            emit Display_log_signal(log_str);
+            break;
         }
-
     }//while
 
 

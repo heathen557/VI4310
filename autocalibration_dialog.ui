@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>相机自动校正窗口</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="imgsource.qrc">
+    <normaloff>:/new/prefix1/images/ccPivotAuto.png</normaloff>:/new/prefix1/images/ccPivotAuto.png</iconset>
+  </property>
   <widget class="QPushButton" name="startCalibration_pushButton">
    <property name="geometry">
     <rect>
@@ -39,7 +43,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>40</x>
@@ -69,6 +73,8 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="imgsource.qrc"/>
+ </resources>
  <connections/>
 </ui>

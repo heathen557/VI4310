@@ -8,8 +8,12 @@ QT       += core gui datavisualization multimedia multimediawidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = VI4310_Version01
+TARGET = VI4310_USB_V1.1
 TEMPLATE = app
+
+
+OTHER_FILES += myapp.rc
+RC_FILE += myapp.rc
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked as deprecated (the exact warnings
@@ -38,7 +42,8 @@ SOURCES += main.cpp\
     filesave_dialog.cpp \
     calmeanstdthread.cpp \
     receusb_msg.cpp \
-    autocalibration_dialog.cpp
+    autocalibration_dialog.cpp \
+    aboutdialog.cpp
 
 
 
@@ -55,12 +60,14 @@ HEADERS  += mainwindow.h \
     filesave_dialog.h \
     calmeanstdthread.h \
     receusb_msg.h \
-    autocalibration_dialog.h
+    autocalibration_dialog.h \
+    aboutdialog.h
 
 FORMS    += mainwindow.ui\
     statisticsdialog.ui \
     filesave_dialog.ui \
-    autocalibration_dialog.ui
+    autocalibration_dialog.ui \
+    aboutdialog.ui
 
 
 RESOURCES += \
