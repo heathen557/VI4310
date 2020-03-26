@@ -419,7 +419,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
     int dx = event->x() - m_lastPos.x();
     int dy = event->y() - m_lastPos.y();
 
-    qDebug()<<" x="<<m_xRot + rotateRate * dy<<",y="<<m_yRot + rotateRate * dx<<",z="<<m_zRot + rotateRate * dx<<endl;
+//    qDebug()<<" x="<<m_xRot + rotateRate * dy<<",y="<<m_yRot + rotateRate * dx<<",z="<<m_zRot + rotateRate * dx<<endl;
 
 
     if (event->buttons() & Qt::LeftButton) {

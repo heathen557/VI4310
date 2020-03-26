@@ -907,6 +907,37 @@ void DealUsb_msg::readLocalPCDFile()
             tof = tofPeakList[1].toInt();
         }
 
+        //循环赋值
+        for(int n=0; n<averageNum-1; n++)
+        {
+            lastTOF[n][i] = lastTOF[n+1][i];
+        }
+        lastTOF[averageNum-1][i] = tof;
+
+        if(haveIndex >averageNum)
+        {
+            float zeroNum = 0;
+            haveIndex = averageNum+1;
+            float allTof_100 = 0;
+            for(int k=0; k<averageNum; k++)     //100帧取平均   ，如果有0的数据则不进行平均处理
+            {
+                if(lastTOF[k][i] == 0)
+                {
+                    zeroNum = zeroNum+1;
+                }
+                allTof_100 += lastTOF[k][i];
+            }
+            if(zeroNum != averageNum)
+
+                tof = allTof_100/(averageNum-zeroNum);
+        }
+
+
+
+
+
+
+
         /*********************pileUp 以及 offset 校正部分******************************/
         rawTof = tof;
         if(true == is_pileUp_flag)
@@ -1013,6 +1044,12 @@ void DealUsb_msg::readLocalPCDFile()
             temp_y = calibration_y(tof,imgRow,imgCol);
             temp_x = calibration_x(temp_y,imgRow,imgCol);
             temp_z = calibration_z(temp_y,imgRow,imgCol);
+            if(intensity<peakOffset)
+            {
+                temp_y = 0;
+                temp_x = 0;
+                temp_z = 0;
+            }
             QColor mColor = QColor(tofColor);
             r = mColor.red();
             g = mColor.green();
@@ -1024,6 +1061,11 @@ void DealUsb_msg::readLocalPCDFile()
             tempRgbCloud.points[cloudIndex].rgb = *reinterpret_cast<float*>(&rgb);
 
             //            qDebug()<<" cloudIndex = "<<cloudIndex<<endl;
+
+
+
+
+
 
             /************鼠标点击处显示信息相关*************/
             mouseShowMutex.lock();
@@ -1069,6 +1111,7 @@ void DealUsb_msg::readLocalPCDFile()
     }  //一帧数据已经读取完成
 
 
+    haveIndex++;
 
 
     //统计信息相关的 ，将统计信息的容器赋值给全局变量

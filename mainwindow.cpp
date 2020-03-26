@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     frameCount  = 0 ;     //帧率
     isLinkSuccess = false;     //USB 连接是否成功的标识
+    ui->groupBox_5->setVisible(false);
 
     ui->statusBar->addWidget(&fpsLabel);
 //    ui->statusBar->setStyleSheet(QString("QStatusBar::item{border:0px}"));
@@ -407,12 +408,15 @@ void MainWindow::on_peakOffset_lineEdit_returnPressed()
 {
     int peakOffset = ui->peakOffset_lineEdit->text().toInt();
     dealMsg_obj->peakOffset = peakOffset;
+
+    qDebug()<<"peakOffset = "<<peakOffset;
 }
 //显示  平均的帧数
 void MainWindow::on_averageNum_lineEdit_returnPressed()
 {
     int average_frameNum = ui->averageNum_lineEdit->text().toInt();
     dealMsg_obj->averageNum = average_frameNum;
+    qDebug()<<"averageNum = "<<average_frameNum;
 }
 //显示 只显示中心区域
 void MainWindow::on_centerShowYes_radioButton_clicked()
@@ -651,9 +655,28 @@ void MainWindow::on_pileUp_checkBox_clicked()
 }
 
 
+//!
+//! \brief MainWindow::on_about_action_triggered
+//!显示版本信息
 void MainWindow::on_about_action_triggered()
 {
     about_dia.show();
 }
 
+
+//!
+//! \brief MainWindow::keyPressEvent
+//! \param e
+//! 按键
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+    qDebug()<<"key num = "<<e->key();
+    if(90 == e->key())
+    {
+        ui->groupBox_5->setVisible(true);
+    }else if(88 == e->key())
+    {
+        ui->groupBox_5->setVisible(false);
+    }
+}
 

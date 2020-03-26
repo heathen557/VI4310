@@ -29,6 +29,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void keyPressEvent(QKeyEvent *e);
+
     void init_thread();    //线程的初始化
     void init_connect();   //信号与槽的初始化
     void load_ini_file();   //加载配置文件
@@ -106,6 +108,7 @@ private slots:
     void on_about_action_triggered();
 
     void on_pileUp_checkBox_clicked();
+
 
 signals:
     void change_gain_signal(float);
